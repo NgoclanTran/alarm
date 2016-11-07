@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         my_intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 // set the alarm manager
-                alarm_manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                alarm_manager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                         pending_intent);
 
             }
