@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
+import android.hardware.SensorManager;
 
 
 public class RingtonePlayingService extends Service {
@@ -13,6 +14,7 @@ public class RingtonePlayingService extends Service {
     MediaPlayer media_song;
     int startId;
     boolean isRunning;
+    AccelerometerListener accelerometerListener;
 
 
     @Override
@@ -23,6 +25,8 @@ public class RingtonePlayingService extends Service {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        accelerometerListener = AccelerometerListener.getInstance();
+
         Log.i("LocalService", "Received start id " + startId + ": " + intent);
 
         // fetch the extra string from the alarm on/alarm off values
@@ -87,6 +91,10 @@ public class RingtonePlayingService extends Service {
 
             this.isRunning = true;
             this.startId = 0;
+
+            //Activate accelerometer listener
+            accelerometerListener.getManager().registerListener(accelerometerListener,accelerometerListener.sensor, SensorManager.SENSOR_DELAY_GAME);
+
 
             // set up the start command for the notification
             //notify_manager.notify(0, notification_popup);
