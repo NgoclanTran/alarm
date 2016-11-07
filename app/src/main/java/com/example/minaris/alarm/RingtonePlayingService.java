@@ -13,6 +13,7 @@ public class RingtonePlayingService extends Service {
     MediaPlayer media_song;
     int startId;
     boolean isRunning;
+    AccelerometerListener accelerometerListener;
 
 
     @Override
@@ -23,6 +24,8 @@ public class RingtonePlayingService extends Service {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        accelerometerListener = AccelerometerListener.getInstance();
+
         Log.i("LocalService", "Received start id " + startId + ": " + intent);
 
         // fetch the extra string from the alarm on/alarm off values
