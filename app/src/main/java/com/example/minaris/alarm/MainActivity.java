@@ -45,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     AccelerometerListener acceloremeter_listener;
     float ax, ay, az;
     int choose_whale_sound;
+    Calendar calendar;
+    Intent my_intent;
 
 
     @Override
@@ -59,7 +61,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         acceloremeter_listener = AccelerometerListener.getInstance();
         acceloremeter_listener.setContext(context);
-        acceloremeter_listener.getManager().registerListener(acceloremeter_listener, acceloremeter_listener.getSensor(), SensorManager.SENSOR_DELAY_GAME);
+        acceloremeter_listener.setActivity(this);
+        //acceloremeter_listener.getManager().registerListener(acceloremeter_listener, acceloremeter_listener.getSensor(), SensorManager.SENSOR_DELAY_GAME);
+
 
         // initialize our alarm manager
         alarm_manager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -71,10 +75,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         update_text = (TextView) findViewById(R.id.update_text);
 
         // create an instance of a calendar
-        final Calendar calendar = Calendar.getInstance();
+        calendar = Calendar.getInstance();
 
         // create an intent to the Alarm Receiver class
-        final Intent my_intent = new Intent(this.context, Alarm_Receiver.class);
+        my_intent = new Intent(this.context, Alarm_Receiver.class);
 
 /*
         // create the spinner in the main UI
@@ -306,5 +310,51 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
 
+    }
+
+    public void snooze(){
+        // method that changes the update text Textbox
+        set_alarm_text("Alarm motion snooze!");
+
+        // cancel the alarm
+        if(pending_intent == null){
+            return;
+        }
+
+        Log.e("Acc Z", String.valueOf(acceloremeter_listener.az));
+
+        alarm_manager.cancel(pending_intent);
+
+        // put extra string into my_intent
+        // tells the clock that you pressed the "alarm off" button
+        my_intent.putExtra("extra", "alarm off");
+        // also put an extra int into the alarm off section
+        // to prevent crashes in a Null Pointer Exception
+        // my_intent.putExtra("whale_choice", choose_whale_sound);
+
+
+        // stop the ringtone
+        sendBroadcast(my_intent);
+
+        my_intent.putExtra("extra", "alarm on");
+
+        // put in an extra int into my_intent
+        // tells the clock that you want a certain value from the drop-down menu/spinner
+        //my_intent.putExtra("whale_choice", choose_whale_sound);
+        //Log.e("The whale id is" , String.valueOf(choose_whale_sound));
+
+        // create a pending intent that delays the intent
+        // until the specified calendar time
+        pending_intent = PendingIntent.getBroadcast(MainActivity.this, 0,
+                my_intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        calendar.getInstance();
+        calendar.add(Calendar.MINUTE,2);
+
+        // set the alarm manager
+        alarm_manager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                pending_intent);
+
+        notify_manager.notify(0, notification_popup);
     }
 }
