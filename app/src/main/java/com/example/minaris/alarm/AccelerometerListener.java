@@ -19,8 +19,12 @@ public class AccelerometerListener implements SensorEventListener {
     Sensor sensor;
     Context context;
     MainActivity activity;
+    Boolean snoozing;
+    Boolean canceling;
 
     private AccelerometerListener(){
+        snoozing = false;
+        canceling = false;
     }
 
     public void setActivity(MainActivity activity){
@@ -54,8 +58,12 @@ public class AccelerometerListener implements SensorEventListener {
     float az;
 
     public void onSensorChanged(SensorEvent event) {
-        if (az > 1){
+        if (Math.abs(az) > 1 && (! (snoozing || canceling ))){
+            snoozing = true;
             activity.snooze();
+        } else if (Math.abs(ax) > 1 && (! (snoozing || canceling ))){
+            canceling = true;
+            activity.cancel();
         }
         ax = event.values[0];
         ay = event.values[1];

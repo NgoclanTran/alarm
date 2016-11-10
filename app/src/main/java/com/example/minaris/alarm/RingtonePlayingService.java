@@ -112,6 +112,11 @@ public class RingtonePlayingService extends Service {
 
             this.isRunning = false;
             this.startId = 0;
+
+            //Deactivate accelerometer listener
+            accelerometerListener.getManager().unregisterListener(accelerometerListener);
+            accelerometerListener.snoozing = false;
+            accelerometerListener.canceling = false;
         }
 
         // these are if the user presses random buttons

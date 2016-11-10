@@ -327,7 +327,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         // put extra string into my_intent
         // tells the clock that you pressed the "alarm off" button
-        my_intent.putExtra("extra", "alarm off");
+        my_intent.putExtra("extra", "alarm snooze");
         // also put an extra int into the alarm off section
         // to prevent crashes in a Null Pointer Exception
         // my_intent.putExtra("whale_choice", choose_whale_sound);
@@ -349,7 +349,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 my_intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         calendar.getInstance();
-        calendar.add(Calendar.MINUTE,2);
+        calendar.add(Calendar.SECOND,20);
 
         // set the alarm manager
         alarm_manager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
@@ -357,4 +357,30 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         notify_manager.notify(0, notification_popup);
     }
+
+    public void cancel() {
+
+        // method that changes the update text Textbox
+        set_alarm_text("Alarm motion off!");
+
+        // cancel the alarm
+        if (pending_intent == null) {
+            return;
+        }
+
+        Log.e("Acc X", String.valueOf(acceloremeter_listener.ax));
+
+        alarm_manager.cancel(pending_intent);
+
+        // put extra string into my_intent
+        // tells the clock that you pressed the "alarm off" button
+        my_intent.putExtra("extra", "alarm off");
+        // also put an extra int into the alarm off section
+        // to prevent crashes in a Null Pointer Exception
+        // my_intent.putExtra("whale_choice", choose_whale_sound);
+
+
+        // stop the ringtone
+        sendBroadcast(my_intent);
+    };
 }
