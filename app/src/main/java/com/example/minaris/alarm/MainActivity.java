@@ -30,6 +30,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 
 import java.util.Calendar;
+import com.gc.materialdesign.views.ButtonRectangle;
 
 @TargetApi(Build.VERSION_CODES.M)
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -111,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 .build();
 
         // initialize start button
-        Button alarm_on = (Button) findViewById(R.id.alarm_on);
+        ButtonRectangle alarm_on = (ButtonRectangle) findViewById(R.id.alarm_on);
 
         // create an onClick listener to start the alarm
         alarm_on.setOnClickListener(new View.OnClickListener() {
@@ -172,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
         // initialize the stop button
-        Button alarm_off = (Button) findViewById(R.id.alarm_off);
+        ButtonRectangle alarm_off = (ButtonRectangle) findViewById(R.id.alarm_off);
         // create an onClick listener to stop the alarm or undo an alarm set
 
         alarm_off.setOnClickListener(new View.OnClickListener() {
