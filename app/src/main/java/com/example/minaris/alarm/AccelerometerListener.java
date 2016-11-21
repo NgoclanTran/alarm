@@ -4,7 +4,6 @@ package com.example.minaris.alarm;
  * Created by sebastianstoelen on 07/11/2016.
  */
 
-import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -18,7 +17,7 @@ public class AccelerometerListener implements SensorEventListener {
     SensorManager manager;
     Sensor sensor;
     Context context;
-    MainActivity activity;
+    SetAlarmActivity activity;
     Boolean snoozing;
     Boolean canceling;
 
@@ -27,7 +26,7 @@ public class AccelerometerListener implements SensorEventListener {
         canceling = false;
     }
 
-    public void setActivity(MainActivity activity){
+    public void setActivity(SetAlarmActivity activity){
         this.activity = activity;
     }
 
