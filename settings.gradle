@@ -1,1 +1,2 @@
-include ':app', ':MaterialDesign'
+include ':app', ':MaterialDesign', ':deviceGestureLib'
+include ':deviceGestureLib'
