@@ -12,7 +12,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
+        AlarmDbHelper db = new AlarmDbHelper(this);
 
         super.onCreate(savedInstanceState);
     }
