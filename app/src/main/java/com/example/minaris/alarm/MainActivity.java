@@ -32,6 +32,8 @@ import android.hardware.SensorEventListener;
 import java.util.Calendar;
 import com.gc.materialdesign.views.ButtonRectangle;
 
+import info.augury.devicegesturelib.DeviceGestureLibrary;
+
 @TargetApi(Build.VERSION_CODES.M)
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -216,51 +218,56 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             public void onClick(View v) {
 
                 // method that changes the update text Textbox
-                set_alarm_text("Alarm snooze!");
+//                set_alarm_text("Alarm snooze!");
+//
+//                // cancel the alarm
+//                if(pending_intent == null){
+//                    return;
+//                }
+//
+//                Log.e("Acc X", String.valueOf(acceloremeter_listener.ax));
+//                Log.e("Acc Y", String.valueOf(acceloremeter_listener.ay));
+//                Log.e("Acc Z", String.valueOf(acceloremeter_listener.az));
+//
+//                alarm_manager.cancel(pending_intent);
+//
+//                // put extra string into my_intent
+//                // tells the clock that you pressed the "alarm off" button
+//                my_intent.putExtra("extra", "alarm off");
+//                // also put an extra int into the alarm off section
+//                // to prevent crashes in a Null Pointer Exception
+//                // my_intent.putExtra("whale_choice", choose_whale_sound);
+//
+//
+//                // stop the ringtone
+//                sendBroadcast(my_intent);
+//
+//                my_intent.putExtra("extra", "alarm on");
+//
+//                // put in an extra int into my_intent
+//                // tells the clock that you want a certain value from the drop-down menu/spinner
+//                //my_intent.putExtra("whale_choice", choose_whale_sound);
+//                //Log.e("The whale id is" , String.valueOf(choose_whale_sound));
+//
+//                // create a pending intent that delays the intent
+//                // until the specified calendar time
+//                pending_intent = PendingIntent.getBroadcast(MainActivity.this, 0,
+//                        my_intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//                calendar.getInstance();
+//                calendar.add(Calendar.MINUTE,2);
+//
+//                // set the alarm manager
+//                alarm_manager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+//                        pending_intent);
+//
+//                notify_manager.notify(0, notification_popup);
 
-                // cancel the alarm
-                if(pending_intent == null){
-                    return;
-                }
+                DataReceiver receiver = new DataReceiver();
+                long interval = 50 * 1000000; //Interval between measures in nanoseconds (50ms)
+                int count = 10; //Number of measures
 
-                Log.e("Acc X", String.valueOf(acceloremeter_listener.ax));
-                Log.e("Acc Y", String.valueOf(acceloremeter_listener.ay));
-                Log.e("Acc Z", String.valueOf(acceloremeter_listener.az));
-
-                alarm_manager.cancel(pending_intent);
-
-                // put extra string into my_intent
-                // tells the clock that you pressed the "alarm off" button
-                my_intent.putExtra("extra", "alarm off");
-                // also put an extra int into the alarm off section
-                // to prevent crashes in a Null Pointer Exception
-                // my_intent.putExtra("whale_choice", choose_whale_sound);
-
-
-                // stop the ringtone
-                sendBroadcast(my_intent);
-
-                my_intent.putExtra("extra", "alarm on");
-
-                // put in an extra int into my_intent
-                // tells the clock that you want a certain value from the drop-down menu/spinner
-                //my_intent.putExtra("whale_choice", choose_whale_sound);
-                //Log.e("The whale id is" , String.valueOf(choose_whale_sound));
-
-                // create a pending intent that delays the intent
-                // until the specified calendar time
-                pending_intent = PendingIntent.getBroadcast(MainActivity.this, 0,
-                        my_intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                calendar.getInstance();
-                calendar.add(Calendar.MINUTE,2);
-
-                // set the alarm manager
-                alarm_manager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                        pending_intent);
-
-                notify_manager.notify(0, notification_popup);
-
+                DeviceGestureLibrary.recordGesture(context, interval, count, receiver);
             }
         });
 
