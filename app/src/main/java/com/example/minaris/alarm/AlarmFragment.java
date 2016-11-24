@@ -37,18 +37,38 @@ public class AlarmFragment extends Fragment {
                 android.R.layout.simple_list_item_1,
                 listItems);
         lv.setAdapter(adapter);
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fabAlarm);
-        fab.setOnClickListener(new View.OnClickListener() {
+        return view;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean visible)
+    {
+        super.setUserVisibleHint(visible);
+        if (visible && isResumed())
+        {
+            onResume();
+        }
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        if (!getUserVisibleHint())
+        {
+            return;
+        }
+
+        MainActivity mainActivity = (MainActivity)getActivity();
+        mainActivity.fab.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 listItems.add("string");
                 adapter.notifyDataSetChanged();
             }
 
         });
-
-
-        return view;
     }
+
 }
