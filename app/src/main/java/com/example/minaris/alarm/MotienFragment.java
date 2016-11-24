@@ -19,7 +19,10 @@ public class MotienFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_motien, viewGroup, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
+                             Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_motien, viewGroup, false);
+        return view;
     }
 }

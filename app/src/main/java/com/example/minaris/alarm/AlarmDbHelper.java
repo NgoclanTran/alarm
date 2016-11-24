@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.minaris.alarm.AlarmContract.AlarmEntry;
 import com.example.minaris.alarm.AlarmContract.SnoozeEntry;
+
 /**
  * Created by jodeneve on 21/11/2016.
  */
