@@ -7,7 +7,8 @@
     <ListView
         android:id="@+id/listviewAlarm"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+        android:layout_height="fill_parent"
+        android:focusable="true" >
     </ListView>
 
 </RelativeLayout>

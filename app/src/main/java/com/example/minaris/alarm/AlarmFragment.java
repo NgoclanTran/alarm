@@ -1,14 +1,14 @@
 package com.example.minaris.alarm;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
-import android.support.design.widget.FloatingActionButton;
 import java.util.ArrayList;
-import android.widget.ArrayAdapter;
 
 /**
  * Created by jodeneve on 23/11/2016.
@@ -16,11 +16,11 @@ import android.widget.ArrayAdapter;
 
 public class AlarmFragment extends Fragment {
 
-    ArrayList<String> listItems;
+    //ArrayList<String> listItems;
     AlarmAdapter adapter;
 
     public AlarmFragment () {
-        listItems = new ArrayList<String>();
+        //listItems = new ArrayList<String>();
     }
 
     @Override
@@ -38,6 +38,19 @@ public class AlarmFragment extends Fragment {
 //                listItems);
         adapter = new AlarmAdapter(getContext());
         lv.setAdapter(adapter);
+        lv.setOnItemClickListener(new ListView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                System.out.println("in item on click");
+                AlarmData ad = adapter.getItem(i);
+                Intent intent = new Intent(getContext(), SetAlarmActivity.class);
+                intent.putExtra("theAlarm", ad);
+                startActivity(intent);
+            }
+
+        });
+
         return view;
     }
 

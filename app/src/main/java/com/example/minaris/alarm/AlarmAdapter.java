@@ -64,6 +64,11 @@ public class AlarmAdapter extends BaseAdapter {
         return data.get(i);
     }
 
+    @Override
+    public boolean isEnabled(int position) {
+        return super.isEnabled(position);
+    }
+
     public void addData () {
         AlarmData ad = new AlarmData();
         ad.hour = new Date();

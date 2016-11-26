@@ -1,7 +1,7 @@
 package com.example.minaris.alarm;
 
-import android.text.Html;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,7 +10,7 @@ import java.util.Date;
  * Created by jodeneve on 26/11/2016.
  */
 
-public class AlarmData {
+public class AlarmData implements Serializable {
 
     public boolean mon;
     public boolean tue;
