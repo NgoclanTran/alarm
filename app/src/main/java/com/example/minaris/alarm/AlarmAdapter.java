@@ -43,9 +43,11 @@ public class AlarmAdapter extends BaseAdapter {
         }
 
         TextView text = (TextView) vi.findViewById(R.id.date);
-        Date date = getItem(i).hour;
-        String hour = ((Integer) date.getHours()).toString() +
-                ":" + ((Integer) date.getMinutes()).toString();
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+        String hour = dateFormat.format(getItem(i).hour);
+//        Date date = getItem(i).hour;
+//        String hour = ((Integer) date.getHours()).toString() +
+//                ":" + ((Integer) date.getMinutes()).toString();
         text.setText(hour);
 
         return vi;
@@ -63,7 +65,6 @@ public class AlarmAdapter extends BaseAdapter {
 
     public void addData () {
         AlarmData ad = new AlarmData();
-      //DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         ad.hour = new Date();
         data.add(ad);
         this.notifyDataSetChanged();
