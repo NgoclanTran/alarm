@@ -1,14 +1,14 @@
 package com.example.minaris.alarm;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Switch;
 import android.widget.TextView;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,13 +42,14 @@ public class AlarmAdapter extends BaseAdapter {
             vi = inflater.inflate(R.layout.alarm_row, null);
         }
 
-        TextView text = (TextView) vi.findViewById(R.id.date);
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm");
-        String hour = dateFormat.format(getItem(i).hour);
-//        Date date = getItem(i).hour;
-//        String hour = ((Integer) date.getHours()).toString() +
-//                ":" + ((Integer) date.getMinutes()).toString();
-        text.setText(hour);
+        TextView date = (TextView) vi.findViewById(R.id.date);
+        date.setText(getItem(i).getHourAndMinutesText());
+
+        TextView days = (TextView) vi.findViewById(R.id.days);
+        days.setText(Html.fromHtml(getItem(i).generateDaysText()));
+
+        Switch sw = (Switch) vi.findViewById(R.id.alarmSwitch);
+        sw.setChecked(getItem(i).toggled);
 
         return vi;
     }
