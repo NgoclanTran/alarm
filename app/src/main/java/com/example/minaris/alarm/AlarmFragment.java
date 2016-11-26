@@ -17,7 +17,7 @@ import android.widget.ArrayAdapter;
 public class AlarmFragment extends Fragment {
 
     ArrayList<String> listItems;
-    ArrayAdapter<String> adapter;
+    AlarmAdapter adapter;
 
     public AlarmFragment () {
         listItems = new ArrayList<String>();
@@ -33,9 +33,10 @@ public class AlarmFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_alarm, viewGroup, false);
         final ListView lv = (ListView) view.findViewById(R.id.listviewAlarm);
-        adapter=new ArrayAdapter<String>(getContext(),
-                android.R.layout.simple_list_item_1,
-                listItems);
+//        adapter=new ArrayAdapter<String>(getContext(),
+//                android.R.layout.simple_list_item_1,
+//                listItems);
+        adapter = new AlarmAdapter(getContext());
         lv.setAdapter(adapter);
         return view;
     }
@@ -64,8 +65,7 @@ public class AlarmFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                listItems.add("string");
-                adapter.notifyDataSetChanged();
+                adapter.addData();
             }
 
         });
