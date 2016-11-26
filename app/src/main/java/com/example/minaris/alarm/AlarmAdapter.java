@@ -42,8 +42,11 @@ public class AlarmAdapter extends BaseAdapter {
             vi = inflater.inflate(R.layout.alarm_row, null);
         }
 
-        TextView text = (TextView) vi.findViewById(R.id.text);
-        text.setText(getItem(i).hour.toString());
+        TextView text = (TextView) vi.findViewById(R.id.date);
+        Date date = getItem(i).hour;
+        String hour = ((Integer) date.getHours()).toString() +
+                ":" + ((Integer) date.getMinutes()).toString();
+        text.setText(hour);
 
         return vi;
     }
