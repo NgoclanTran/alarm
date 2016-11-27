@@ -84,4 +84,8 @@ public class AlarmFragment extends Fragment {
         });
     }
 
+    public static void fabOnClick(){
+        System.out.println("FABONCLICK");
+    }
+
 }

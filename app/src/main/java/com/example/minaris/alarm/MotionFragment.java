@@ -10,9 +10,9 @@ import android.view.ViewGroup;
  * Created by jodeneve on 23/11/2016.
  */
 
-public class MotienFragment extends Fragment {
+public class MotionFragment extends Fragment {
 
-    public MotienFragment () {}
+    public MotionFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -22,7 +22,7 @@ public class MotienFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_motien, viewGroup, false);
+        View view = inflater.inflate(R.layout.fragment_motion, viewGroup, false);
         return view;
     }
 }

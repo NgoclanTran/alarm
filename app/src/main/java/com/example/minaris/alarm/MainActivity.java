@@ -1,6 +1,11 @@
 package com.example.minaris.alarm;
 
 
+import android.annotation.TargetApi;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +17,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.View;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -47,25 +53,31 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         fab = (FloatingActionButton) findViewById(R.id.fabAlarm);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View view) {
-//                List fragments = getSupportFragmentManager().getFragments();
-//                if(fragments.get(viewPager.getCurrentItem()) instanceof AlarmFragment) {
-//                    AlarmFragment.fabOnClick();
-//                }
-//            }
-//
-//        });
+ /*       fab.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                System.out.println("HALLOWWW");
+                /*List fragments = getSupportFragmentManager().getFragments();
+                if(fragments.get(viewPager.getCurrentItem()) instanceof AlarmFragment) {
+                    AlarmFragment.fabOnClick();
+                }
+            }
+
+        });*/
 
     }
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new AlarmFragment(), "Alarms");
-        adapter.addFragment(new MotienFragment(), "Motiens");
+        adapter.addFragment(new MotionFragment(), "Motions");
         viewPager.setAdapter(adapter);
+    }
+
+    public void fabOnClick(View view){
+        Intent intent = new Intent(MainActivity.this, SetAlarmActivity.class);
+        startActivity(intent);
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

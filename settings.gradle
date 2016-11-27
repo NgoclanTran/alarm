@@ -1,2 +1,3 @@
-include ':app', ':MaterialDesign', ':deviceGestureLib'
+include ':app', ':MaterialDesign', ':deviceGestureLib', ':library'
 include ':deviceGestureLib'
+project(':library').projectDir = new File('android-floating-action-button-master/library')

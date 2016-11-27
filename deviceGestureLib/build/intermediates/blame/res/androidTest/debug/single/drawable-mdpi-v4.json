@@ -2,5 +2,9 @@
     {
         "merged": "/Users/jodeneve/Desktop/alarm/deviceGestureLib/build/intermediates/res/merged/androidTest/debug/drawable-mdpi-v4/ic_launcher.png",
         "source": "/Users/jodeneve/Desktop/alarm/deviceGestureLib/build/intermediates/bundles/debug/res/drawable-mdpi-v4/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/sebastianstoelen/Documents/workspace/alarm/deviceGestureLib/build/intermediates/res/merged/androidTest/debug/drawable-mdpi-v4/ic_launcher.png",
+        "source": "/Users/sebastianstoelen/Documents/workspace/alarm/deviceGestureLib/build/intermediates/bundles/debug/res/drawable-mdpi-v4/ic_launcher.png"
     }
 ]
