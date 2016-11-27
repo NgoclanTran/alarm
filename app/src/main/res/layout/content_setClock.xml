@@ -23,47 +23,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Alarm on"
+        android:text="Add Alarm"
         android:id="@+id/alarm_on"
-        android:clickable="true"
-        android:layout_below="@+id/update_text"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <com.gc.materialdesign.views.ButtonRectangle
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Alarm off"
-        android:id="@+id/alarm_off"
-        android:clickable="true"
-        android:layout_below="@+id/update_text"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Did you set the alarm?"
-        android:id="@+id/update_text"
-        android:layout_below="@+id/timePicker"
-        android:layout_centerHorizontal="true" />
-
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/richard_spinner"
-        android:layout_below="@+id/alarm_on"
-        android:layout_centerHorizontal="true"
-        />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Alarm snooze"
-        android:id="@+id/alarm_snooze"
         android:clickable="true"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />

@@ -5,8 +5,10 @@ import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -41,6 +43,8 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
     int choose_whale_sound;
     Calendar calendar;
     Intent my_intent;
+    AlarmDbHelper mDbHelper;
+    SQLiteDatabase db;
 
 
     @Override
@@ -66,13 +70,16 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
         alarm_timepicker = (TimePicker) findViewById(R.id.timePicker);
 
         //initialize our text update box
-        update_text = (TextView) findViewById(R.id.update_text);
+        //update_text = (TextView) findViewById(R.id.update_text);
 
         // create an instance of a calendar
         calendar = Calendar.getInstance();
 
         // create an intent to the Alarm Receiver class
         my_intent = new Intent(this.context, Alarm_Receiver.class);
+
+        //mDbHelper = new AlarmDbHelper(getApplicationContext());
+        //db = mDbHelper.getWritableDatabase();
 
 /*
         // create the spinner in the main UI
@@ -157,49 +164,17 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
                 alarm_manager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                         pending_intent);
 
+                addAlarmToDatabase(hour_string + ":" + minute_string);
+
             }
+
+
 
 
 
         });
 
-
-
-        // initialize the stop button
-        ButtonRectangle alarm_off = (ButtonRectangle) findViewById(R.id.alarm_off);
-        // create an onClick listener to stop the alarm or undo an alarm set
-
-        alarm_off.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Log.e("Log", "Alarm off");
-
-                // method that changes the update text Textbox
-                set_alarm_text("Alarm off!");
-
-                // cancel the alarm
-                if(pending_intent == null){
-                    return;
-                }
-                alarm_manager.cancel(pending_intent);
-
-                // put extra string into my_intent
-                // tells the clock that you pressed the "alarm off" button
-                my_intent.putExtra("extra", "alarm off");
-                // also put an extra int into the alarm off section
-                // to prevent crashes in a Null Pointer Exception
-               // my_intent.putExtra("whale_choice", choose_whale_sound);
-
-
-                // stop the ringtone
-                sendBroadcast(my_intent);
-
-
-            }
-        });
-
-        // initialize the stop button
+       /* // initialize the stop button
         Button alarm_snooze = (Button) findViewById(R.id.alarm_snooze);
         // create an onClick listener to stop the alarm or undo an alarm set
 
@@ -208,59 +183,13 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
             @Override
             public void onClick(View v) {
 
-                // method that changes the update text Textbox
-//                set_alarm_text("Alarm snooze!");
-//
-//                // cancel the alarm
-//                if(pending_intent == null){
-//                    return;
-//                }
-//
-//                Log.e("Acc X", String.valueOf(acceloremeter_listener.ax));
-//                Log.e("Acc Y", String.valueOf(acceloremeter_listener.ay));
-//                Log.e("Acc Z", String.valueOf(acceloremeter_listener.az));
-//
-//                alarm_manager.cancel(pending_intent);
-//
-//                // put extra string into my_intent
-//                // tells the clock that you pressed the "alarm off" button
-//                my_intent.putExtra("extra", "alarm off");
-//                // also put an extra int into the alarm off section
-//                // to prevent crashes in a Null Pointer Exception
-//                // my_intent.putExtra("whale_choice", choose_whale_sound);
-//
-//
-//                // stop the ringtone
-//                sendBroadcast(my_intent);
-//
-//                my_intent.putExtra("extra", "alarm on");
-//
-//                // put in an extra int into my_intent
-//                // tells the clock that you want a certain value from the drop-down menu/spinner
-//                //my_intent.putExtra("whale_choice", choose_whale_sound);
-//                //Log.e("The whale id is" , String.valueOf(choose_whale_sound));
-//
-//                // create a pending intent that delays the intent
-//                // until the specified calendar time
-//                pending_intent = PendingIntent.getBroadcast(MainActivity.this, 0,
-//                        my_intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//                calendar.getInstance();
-//                calendar.add(Calendar.MINUTE,2);
-//
-//                // set the alarm manager
-//                alarm_manager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-//                        pending_intent);
-//
-//                notify_manager.notify(0, notification_popup);
-
                 DataReceiver receiver = new DataReceiver();
                 long interval = 50 * 1000000; //Interval between measures in nanoseconds (50ms)
                 int count = 10; //Number of measures
 
                 DeviceGestureLibrary.recordGesture(context, interval, count, receiver);
             }
-        });
+        });*/
 
 
 
@@ -382,4 +311,15 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
         // stop the ringtone
         sendBroadcast(my_intent);
     };
+
+    public void addAlarmToDatabase(String timeString){
+        System.out.println("ADDALARM");
+        /*ContentValues values = new ContentValues();
+        values.put(AlarmContract.AlarmEntry.TIME_SLOT, timeString);
+        values.put(AlarmContract.AlarmEntry.RINGTONE, "ringtone");
+        values.put(AlarmContract.AlarmEntry.SNOOZABLE, "true");
+
+        // Insert the new row, returning the primary key value of the new row
+        long newRowId = db.insert(AlarmContract.AlarmEntry.TABLE_NAME, null, values);*/
+    }
 }

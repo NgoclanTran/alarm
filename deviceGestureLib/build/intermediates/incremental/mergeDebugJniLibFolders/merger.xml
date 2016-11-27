@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="/Users/jodeneve/Desktop/alarm/deviceGestureLib/src/main/jniLibs"/></dataSet><dataSet config="debug"><source path="/Users/jodeneve/Desktop/alarm/deviceGestureLib/src/debug/jniLibs"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="/Users/sebastianstoelen/Documents/workspace/alarm/deviceGestureLib/src/main/jniLibs"/></dataSet><dataSet config="debug"><source path="/Users/sebastianstoelen/Documents/workspace/alarm/deviceGestureLib/src/debug/jniLibs"/></dataSet></merger>
