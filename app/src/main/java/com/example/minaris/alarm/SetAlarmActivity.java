@@ -78,8 +78,8 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
         // create an intent to the Alarm Receiver class
         my_intent = new Intent(this.context, Alarm_Receiver.class);
 
-        //mDbHelper = new AlarmDbHelper(getApplicationContext());
-        //db = mDbHelper.getWritableDatabase();
+        mDbHelper = new AlarmDbHelper(getApplicationContext());
+        db = mDbHelper.getWritableDatabase();
 
 /*
         // create the spinner in the main UI
@@ -144,7 +144,7 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
                 }
 
                 // method that changes the update text Textbox
-                set_alarm_text("Alarm set to: " + hour_string + ":" + minute_string);
+                //set_alarm_text("Alarm set to: " + hour_string + ":" + minute_string);
 
                 // put in extra string into my_intent
                 // tells the clock that you pressed the "alarm on" button
@@ -195,9 +195,9 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
 
     }
 
-    private void set_alarm_text(String output) {
+    /*private void set_alarm_text(String output) {
         update_text.setText(output);
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -242,7 +242,7 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
 
     public void snooze(){
         // method that changes the update text Textbox
-        set_alarm_text("Alarm motion snooze!");
+        //set_alarm_text("Alarm motion snooze!");
 
         // cancel the alarm
         if(pending_intent == null){
@@ -289,7 +289,7 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
     public void cancel() {
 
         // method that changes the update text Textbox
-        set_alarm_text("Alarm motion off!");
+        //set_alarm_text("Alarm motion off!");
 
         // cancel the alarm
         if (pending_intent == null) {
@@ -312,14 +312,17 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
         sendBroadcast(my_intent);
     };
 
+    /*
+    Method to add an alarm for a given time to the database
+     */
     public void addAlarmToDatabase(String timeString){
         System.out.println("ADDALARM");
-        /*ContentValues values = new ContentValues();
+        ContentValues values = new ContentValues();
         values.put(AlarmContract.AlarmEntry.TIME_SLOT, timeString);
         values.put(AlarmContract.AlarmEntry.RINGTONE, "ringtone");
         values.put(AlarmContract.AlarmEntry.SNOOZABLE, "true");
 
         // Insert the new row, returning the primary key value of the new row
-        long newRowId = db.insert(AlarmContract.AlarmEntry.TABLE_NAME, null, values);*/
+        long newRowId = db.insert(AlarmContract.AlarmEntry.TABLE_NAME, null, values);
     }
 }
