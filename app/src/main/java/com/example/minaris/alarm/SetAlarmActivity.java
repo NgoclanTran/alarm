@@ -124,6 +124,8 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
                 // on the time picker
                 calendar.set(Calendar.HOUR_OF_DAY, alarm_timepicker.getHour());
                 calendar.set(Calendar.MINUTE, alarm_timepicker.getMinute());
+                calendar.set(Calendar.SECOND,0);
+                calendar.set(Calendar.MILLISECOND,0);
 
                 // get the int values of the hour and minute
                 int hour = alarm_timepicker.getHour();
