@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="/Users/sebastianstoelen/Documents/workspace/alarm/deviceGestureLib/src/main/assets"/><source path="/Users/sebastianstoelen/Documents/workspace/alarm/deviceGestureLib/build/generated/assets/shaders/debug"/></dataSet><dataSet config="debug"><source path="/Users/sebastianstoelen/Documents/workspace/alarm/deviceGestureLib/src/debug/assets"/></dataSet></merger>
