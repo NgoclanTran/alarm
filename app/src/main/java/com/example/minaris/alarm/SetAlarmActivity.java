@@ -316,7 +316,7 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
     Method to add an alarm for a given time to the database
      */
     public void addAlarmToDatabase(String timeString){
-        System.out.println("ADDALARM");
+        
         ContentValues values = new ContentValues();
         values.put(AlarmContract.AlarmEntry.TIME_SLOT, timeString);
         values.put(AlarmContract.AlarmEntry.RINGTONE, "ringtone");
