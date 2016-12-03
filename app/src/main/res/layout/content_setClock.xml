@@ -32,11 +32,49 @@
     <Spinner
         android:id="@+id/ringtone_spinner"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/timePicker"
-        android:layout_marginTop="22dp"
         android:layout_width="wrap_content"
         android:text="Ringtone"
-        android:spinnerMode="dialog"/>
+        android:spinnerMode="dialog"
+        android:layout_marginRight="36dp"
+        android:layout_marginEnd="36dp"
+        android:layout_below="@+id/timePicker"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="29dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ringtone_spinner"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enable snooze?"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_alignBaseline="@+id/snooze_switch"
+            android:layout_alignBottom="@+id/snooze_switch"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <Switch
+            android:id="@+id/snooze_switch"
+            android:layout_width="match_parent"
+            android:layout_gravity="right|center"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:layout_alignTop="@+id/ringtone_spinner"
+            android:layout_alignParentLeft="true"
+            android:layout_alignStart="@+id/alarm_on"
+            android:layout_alignLeft="@+id/alarm_on" />
+
+    </LinearLayout>
 
 
 </RelativeLayout>
+

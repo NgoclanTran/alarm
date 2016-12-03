@@ -19,13 +19,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.Switch;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import com.gc.materialdesign.views.ButtonRectangle;
 
@@ -39,17 +37,16 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
     NotificationManager notify_manager;
     Notification notification_popup;
     TimePicker alarm_timepicker;
-    TextView update_text;
     Context context;
     PendingIntent pending_intent;
     AccelerometerListener acceloremeter_listener;
-    float ax, ay, az;
     int choose_whale_sound;
     Calendar calendar;
     Intent my_intent;
     AlarmDbHelper mDbHelper;
     SQLiteDatabase db;
     RingtoneSpinnerActivity ringtoneSpinnerActivity;
+    Switch snoozeSwitch;
 
 
     @Override
@@ -103,6 +100,14 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
                 .build();
 
         /*
+         * Initialize the switch to select wheter an alarm is snoozable or not
+         */
+        snoozeSwitch = (Switch) findViewById(R.id.snooze_switch);
+
+        //set the switch to ON
+        snoozeSwitch.setChecked(true);
+
+        /*
          * Initialize the spinner to select the appropriate ringtone
          */
 
@@ -136,27 +141,9 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
                 calendar.set(Calendar.SECOND,0);
                 calendar.set(Calendar.MILLISECOND,0);
 
-                // get the int values of the hour and minute
-                int hour = alarm_timepicker.getHour();
-                int minute = alarm_timepicker.getMinute();
-
-                // convert the int values to strings
-                String hour_string = String.valueOf(hour);
-                String minute_string = String.valueOf(minute);
-
-                // convert 24-hour time to 12-hour time
-                if (hour > 12) {
-                    hour_string = String.valueOf(hour - 12);
-                }
-
-                if (minute < 10) {
-                    //10:7 --> 10:07
-                    minute_string = "0" + String.valueOf(minute);
-                }
-
 
                 //Add the newly created alarm to the database and get its row Id
-                long alarmId = addAlarmToDatabase(calendar.getTimeInMillis(), 1, 1, "repeat");
+                long alarmId = addAlarmToDatabase(calendar.getTimeInMillis(), "repeat");
 
                 // put in extra string into my_intent
                 // tells the clock that you pressed the "alarm on" button and wich alarm is added
@@ -271,7 +258,7 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
         pending_intent = PendingIntent.getBroadcast(SetAlarmActivity.this, 0,
                 my_intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        calendar.getInstance();
+        Calendar.getInstance();
         calendar.add(Calendar.SECOND,20);
 
         // set the alarm manager
@@ -305,7 +292,7 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
 
         // stop the ringtone
         sendBroadcast(my_intent);
-    };
+    }
 
     /*
     Method to add an alarm for a given time to the database
@@ -316,17 +303,23 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
     @param active: indicates whether this alarm is currently activated (1 = active)
     @param reapeat: string containing the days the alarm should go off "Mon Tue Wed Thu Fri Sat Sun"
      */
-    public long addAlarmToDatabase(Long millis, int snoozable, int active, String repeat){
+    public long addAlarmToDatabase(Long millis, String repeat){
 
         //Code to clear database everytime
         //TODO: Delete this line for final version
         db.execSQL("delete from " + AlarmContract.AlarmEntry.TABLE_NAME);
+        
+        int snoozable = 1;
+        if (! snoozeSwitch.isChecked()) {
+            snoozable = 0;
+        }
+        
 
         ContentValues values = new ContentValues();
         values.put(AlarmContract.AlarmEntry.TIME_SLOT, millis.toString());
         values.put(AlarmContract.AlarmEntry.RINGTONE, ringtoneSpinnerActivity.getSelectedRingtone());
         values.put(AlarmContract.AlarmEntry.SNOOZABLE, snoozable);
-        values.put(AlarmContract.AlarmEntry.ACTIVE, active);
+        values.put(AlarmContract.AlarmEntry.ACTIVE, 1);
         values.put(AlarmContract.AlarmEntry.REPEAT,repeat);
 
         // Insert the new row, returning the primary key value of the new row
