@@ -78,14 +78,12 @@ public class AlarmFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                adapter.addData();
+                //adapter.addData();
+                Intent intent = new Intent(getContext(), SetAlarmActivity.class);
+                startActivity(intent);
             }
 
         });
-    }
-
-    public static void fabOnClick(){
-        System.out.println("FABONCLICK");
     }
 
 }

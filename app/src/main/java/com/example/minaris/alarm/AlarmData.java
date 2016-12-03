@@ -19,6 +19,8 @@ public class AlarmData implements Serializable {
     public boolean fri;
     public boolean sat;
     public boolean sun;
+    public boolean snoozable;
+    public String ringtone;
 
     public Date hour;
 

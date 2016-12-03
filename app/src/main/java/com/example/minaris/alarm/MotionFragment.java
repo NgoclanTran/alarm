@@ -1,5 +1,7 @@
 package com.example.minaris.alarm;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -36,15 +38,15 @@ public class MotionFragment extends Fragment {
         final Button startStopButton = (Button) view.findViewById(R.id.startStopButton);
 //        chronometer = new Chronometer(this);
 
-        startStopButton.setOnClickListener(new View.OnClickListener() {
+ /*       startStopButton.setOnClickListener(new View.OnClickListener() {
             @TargetApi(Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
                 long elapsedTime = 0;
-                /*
+
                  Eerste fase, bepaal hoe lang een beweging duurt
                  Button staat op "START"
-                 */
+
                 if(!hasStarted && isFase1) {
                     startStopButton.setText("Stop");
                     hasStarted = true;
@@ -52,10 +54,10 @@ public class MotionFragment extends Fragment {
                     chrono.start();
                 }
 
-                /*
+
                 Eerste fase, bepaal hoe lang een beweging duurt
                 Button staat op "STOP"
-                 */
+
                 if(hasStarted && isFase1){
                     startStopButton.setText("Start");
                     hasStarted = false;
@@ -65,10 +67,10 @@ public class MotionFragment extends Fragment {
 
                 }
 
-                /*
+
                 Tweede fase, beweging registreren
                 Button staat op "START"
-                 */
+
                 if(!hasStarted && !isFase1){
                     startStopButton.setText("STOP");
                     //zelf stoppen wanneer tijd om is
@@ -84,7 +86,7 @@ public class MotionFragment extends Fragment {
 
 
         });
-
+        */
         return view;
     }
 

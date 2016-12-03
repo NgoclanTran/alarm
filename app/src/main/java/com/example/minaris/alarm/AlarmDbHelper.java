@@ -20,7 +20,9 @@ public class AlarmDbHelper extends SQLiteOpenHelper {
             AlarmEntry._ID + " INTEGER PRIMARY KEY," +
             AlarmEntry.TIME_SLOT + " TEXT," +
             AlarmEntry.RINGTONE + " TEXT," +
-            AlarmEntry.SNOOZABLE + " INTEGER )";
+            AlarmEntry.SNOOZABLE + " INTEGER," +
+            AlarmEntry.ACTIVE + " INTEGER," +
+            AlarmEntry.REPEAT + " TEXT)";
 
     private static final String SQL_CREATE_SNOOZE = "CREATE TABLE " + SnoozeEntry.TABLE_NAME + " (" +
             SnoozeEntry._ID + " INTEGER PRIMARY KEY," +

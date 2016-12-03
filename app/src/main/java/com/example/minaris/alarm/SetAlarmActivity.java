@@ -23,6 +23,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
+import java.util.Date;
+
 import com.gc.materialdesign.views.ButtonRectangle;
 
 import info.augury.devicegesturelib.DeviceGestureLibrary;
@@ -166,7 +168,7 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
                 alarm_manager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                         pending_intent);
 
-                addAlarmToDatabase(hour_string + ":" + minute_string);
+                addAlarmToDatabase(calendar.getTimeInMillis(), "ringtone", 1, 1, "repeat");
 
             }
 
@@ -316,15 +318,27 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
 
     /*
     Method to add an alarm for a given time to the database
+
+    @param millis: the time the alarm should go off, specified in milliseconds
+    @param ringtone: the name of the ringtone file that should be played when the alarm goes off
+    @param snoozable: indicates wheter it is possible to snooze this alarm (1 = snoozable)
+    @param active: indicates whether this alarm is currently activated (1 = active)
+    @param reapeat: string containing the days the alarm should go off "Mon Tue Wed Thu Fri Sat Sun"
      */
-    public void addAlarmToDatabase(String timeString){
-        
+    public void addAlarmToDatabase(Long millis, String ringtone, int snoozable, int active, String repeat){
+        db.execSQL("delete * from "+ AlarmContract.AlarmEntry.TABLE_NAME);
+
         ContentValues values = new ContentValues();
-        values.put(AlarmContract.AlarmEntry.TIME_SLOT, timeString);
-        values.put(AlarmContract.AlarmEntry.RINGTONE, "ringtone");
-        values.put(AlarmContract.AlarmEntry.SNOOZABLE, "true");
+        values.put(AlarmContract.AlarmEntry.TIME_SLOT, millis.toString());
+        values.put(AlarmContract.AlarmEntry.RINGTONE, ringtone);
+        values.put(AlarmContract.AlarmEntry.SNOOZABLE, snoozable);
+        values.put(AlarmContract.AlarmEntry.ACTIVE, active);
+        values.put(AlarmContract.AlarmEntry.REPEAT,repeat);
 
         // Insert the new row, returning the primary key value of the new row
         long newRowId = db.insert(AlarmContract.AlarmEntry.TABLE_NAME, null, values);
+
+        Intent intent = new Intent(this.context, MainActivity.class);
+        startActivity(intent);
     }
 }

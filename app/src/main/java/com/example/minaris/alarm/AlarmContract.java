@@ -15,6 +15,8 @@ public class AlarmContract {
         public static final String TIME_SLOT = "time_slot";
         public static final String RINGTONE = "ringtone";
         public static final String SNOOZABLE = "snoozable";
+        public static final String ACTIVE = "active";
+        public static final String REPEAT = "repeat";
     }
 
     public static class SnoozeEntry implements BaseColumns {

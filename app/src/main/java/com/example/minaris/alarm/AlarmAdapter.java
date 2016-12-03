@@ -1,6 +1,8 @@
 package com.example.minaris.alarm;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,10 +23,15 @@ public class AlarmAdapter extends BaseAdapter {
 
     Context context;
     List<AlarmData> data;
+    SQLiteDatabase db;
+    AlarmDbHelper mDbHelper;
 
     public AlarmAdapter(Context context) {
         this.context = context;
-        this.data = new ArrayList<AlarmData>();
+        mDbHelper = new AlarmDbHelper(context);
+        db = mDbHelper.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM " + AlarmContract.AlarmEntry.TABLE_NAME,null);
+        this.data = parseCursor(c);
     }
 
     @Override
@@ -74,5 +81,28 @@ public class AlarmAdapter extends BaseAdapter {
         ad.hour = new Date();
         data.add(ad);
         this.notifyDataSetChanged();
+    }
+
+    public ArrayList<AlarmData> parseCursor(Cursor c){
+        ArrayList<AlarmData> alarmList = new ArrayList<AlarmData>();
+       c.moveToFirst();
+        do {
+            long itemId = c.getLong(c.getColumnIndexOrThrow(AlarmContract.AlarmEntry._ID));
+            String time = c.getString(c.getColumnIndexOrThrow(AlarmContract.AlarmEntry.TIME_SLOT));
+            String ringtone = c.getString(c.getColumnIndexOrThrow(AlarmContract.AlarmEntry.RINGTONE));
+            String snoozable = c.getString(c.getColumnIndexOrThrow(AlarmContract.AlarmEntry.SNOOZABLE));
+            AlarmData data = new AlarmData();
+            data.ringtone = ringtone;
+            if (snoozable.equals("true")){
+                data.snoozable = true;
+            } else {
+                data.snoozable = false;
+            }
+            Date date = new Date(new Long(time));
+            data.hour = date;
+            alarmList.add(data);
+
+        } while (c.moveToNext());
+        return alarmList;
     }
 }
