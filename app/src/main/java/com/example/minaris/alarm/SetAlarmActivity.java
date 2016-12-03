@@ -18,7 +18,9 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -47,6 +49,7 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
     Intent my_intent;
     AlarmDbHelper mDbHelper;
     SQLiteDatabase db;
+    RingtoneSpinnerActivity ringtoneSpinnerActivity;
 
 
     @Override
@@ -71,31 +74,17 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
         //initialize our timepicker
         alarm_timepicker = (TimePicker) findViewById(R.id.timePicker);
 
-        //initialize our text update box
-        //update_text = (TextView) findViewById(R.id.update_text);
-
         // create an instance of a calendar
         calendar = Calendar.getInstance();
 
         // create an intent to the Alarm Receiver class
         my_intent = new Intent(this.context, Alarm_Receiver.class);
 
+        //Set up the database helper
         mDbHelper = new AlarmDbHelper(getApplicationContext());
         db = mDbHelper.getWritableDatabase();
 
-/*
-        // create the spinner in the main UI
-        Spinner spinner = (Spinner) findViewById(R.id.richard_spinner);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.whale_array, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
-        // Set an onclick listener to the onItemSelected method
-        spinner.setOnItemSelectedListener(this);
-*/
+        //set up the notification manager
         notify_manager = (NotificationManager)
                 getSystemService(NOTIFICATION_SERVICE);
         // set up an intent that goes to the Main Activity
@@ -112,6 +101,24 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
                 .setContentIntent(pending_intent_main_activity)
                 .setAutoCancel(true)
                 .build();
+
+        /*
+         * Initialize the spinner to select the appropriate ringtone
+         */
+
+        Spinner spinner = (Spinner) findViewById(R.id.ringtone_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.ringtones_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+        // Create new ringtoneSpinnerActivity
+        ringtoneSpinnerActivity = new RingtoneSpinnerActivity();
+        // Set the newly created activity to the spinner
+        spinner.setOnItemSelectedListener(ringtoneSpinnerActivity);
+
 
         // initialize start button
         ButtonRectangle alarm_on = (ButtonRectangle) findViewById(R.id.alarm_on);
@@ -147,12 +154,13 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
                     minute_string = "0" + String.valueOf(minute);
                 }
 
-                // method that changes the update text Textbox
-                //set_alarm_text("Alarm set to: " + hour_string + ":" + minute_string);
+
+                //Add the newly created alarm to the database and get its row Id
+                long alarmId = addAlarmToDatabase(calendar.getTimeInMillis(), 1, 1, "repeat");
 
                 // put in extra string into my_intent
-                // tells the clock that you pressed the "alarm on" button
-                my_intent.putExtra("extra", "alarm on");
+                // tells the clock that you pressed the "alarm on" button and wich alarm is added
+                my_intent.putExtra("extra", "ON:" + alarmId);
 
                 // put in an extra int into my_intent
                 // tells the clock that you want a certain value from the drop-down menu/spinner
@@ -168,7 +176,6 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
                 alarm_manager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                         pending_intent);
 
-                addAlarmToDatabase(calendar.getTimeInMillis(), "ringtone", 1, 1, "repeat");
 
             }
 
@@ -178,22 +185,6 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
 
         });
 
-       /* // initialize the stop button
-        Button alarm_snooze = (Button) findViewById(R.id.alarm_snooze);
-        // create an onClick listener to stop the alarm or undo an alarm set
-
-
-        alarm_snooze.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                DataReceiver receiver = new DataReceiver();
-                long interval = 50 * 1000000; //Interval between measures in nanoseconds (50ms)
-                int count = 10; //Number of measures
-
-                DeviceGestureLibrary.recordGesture(context, interval, count, receiver);
-            }
-        });*/
 
 
 
@@ -325,12 +316,15 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
     @param active: indicates whether this alarm is currently activated (1 = active)
     @param reapeat: string containing the days the alarm should go off "Mon Tue Wed Thu Fri Sat Sun"
      */
-    public void addAlarmToDatabase(Long millis, String ringtone, int snoozable, int active, String repeat){
-        db.execSQL("delete * from "+ AlarmContract.AlarmEntry.TABLE_NAME);
+    public long addAlarmToDatabase(Long millis, int snoozable, int active, String repeat){
+
+        //Code to clear database everytime
+        //TODO: Delete this line for final version
+        db.execSQL("delete from " + AlarmContract.AlarmEntry.TABLE_NAME);
 
         ContentValues values = new ContentValues();
         values.put(AlarmContract.AlarmEntry.TIME_SLOT, millis.toString());
-        values.put(AlarmContract.AlarmEntry.RINGTONE, ringtone);
+        values.put(AlarmContract.AlarmEntry.RINGTONE, ringtoneSpinnerActivity.getSelectedRingtone());
         values.put(AlarmContract.AlarmEntry.SNOOZABLE, snoozable);
         values.put(AlarmContract.AlarmEntry.ACTIVE, active);
         values.put(AlarmContract.AlarmEntry.REPEAT,repeat);
@@ -340,5 +334,7 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
 
         Intent intent = new Intent(this.context, MainActivity.class);
         startActivity(intent);
+
+        return newRowId;
     }
 }

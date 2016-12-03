@@ -29,5 +29,14 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
+    <Spinner
+        android:id="@+id/ringtone_spinner"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/timePicker"
+        android:layout_marginTop="22dp"
+        android:layout_width="wrap_content"
+        android:text="Ringtone"
+        android:spinnerMode="dialog"/>
+
 
 </RelativeLayout>

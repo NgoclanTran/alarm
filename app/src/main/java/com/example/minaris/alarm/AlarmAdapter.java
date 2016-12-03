@@ -31,7 +31,12 @@ public class AlarmAdapter extends BaseAdapter {
         mDbHelper = new AlarmDbHelper(context);
         db = mDbHelper.getReadableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM " + AlarmContract.AlarmEntry.TABLE_NAME,null);
-        this.data = parseCursor(c);
+        if (c.getCount() > 0){
+            this.data = parseCursor(c);
+        } else {
+            this.data = new ArrayList<AlarmData>();
+        }
+
     }
 
     @Override

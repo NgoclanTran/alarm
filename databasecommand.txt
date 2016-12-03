@@ -1,0 +1,2 @@
+adb exec-out run-as com.example.minaris.alarm cat databases/AlarmDB > database.db
+

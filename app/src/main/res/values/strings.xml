@@ -3,4 +3,8 @@
     <string name="action_settings">Settings</string>
     <string name="one">Alarms</string>
     <string name="two">Motions</string>
+    <string-array name="ringtones_array">
+        <item>ringtone1</item>
+        <item>ringtone2</item>
+    </string-array>
 </resources>
