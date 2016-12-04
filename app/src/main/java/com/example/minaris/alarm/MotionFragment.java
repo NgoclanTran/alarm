@@ -1,6 +1,7 @@
 package com.example.minaris.alarm;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,8 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.TextView;
 
 import com.gc.materialdesign.views.ButtonRectangle;
+
+import info.augury.devicegesturelib.Axis;
+import info.augury.devicegesturelib.CompareMode;
+import info.augury.devicegesturelib.DeviceGestureLibrary;
+import info.augury.devicegesturelib.DeviceGestureModel;
 
 /**
  * Created by jodeneve on 23/11/2016.
@@ -36,16 +43,19 @@ public class MotionFragment extends Fragment {
         hasStarted = false;
         isFase1 = true;
         final Button startStopButton = (Button) view.findViewById(R.id.startStopButton);
-//        chronometer = new Chronometer(this);
+        final TextView motionStatus = view.findViewById(R.id.motionStatus);
+        motionStatus.setText("Fase 1: measure duration of motion");
+      //  chronometer = new Chronometer(this);
 
- /*       startStopButton.setOnClickListener(new View.OnClickListener() {
+      startStopButton.setOnClickListener(new View.OnClickListener() {
             @TargetApi(Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
                 long elapsedTime = 0;
 
-                 Eerste fase, bepaal hoe lang een beweging duurt
-                 Button staat op "START"
+
+                // Eerste fase, bepaal hoe lang een beweging duurt
+                // Button staat op "START"
 
                 if(!hasStarted && isFase1) {
                     startStopButton.setText("Stop");
@@ -55,8 +65,8 @@ public class MotionFragment extends Fragment {
                 }
 
 
-                Eerste fase, bepaal hoe lang een beweging duurt
-                Button staat op "STOP"
+               // Eerste fase, bepaal hoe lang een beweging duurt
+               // Button staat op "STOP"
 
                 if(hasStarted && isFase1){
                     startStopButton.setText("Start");
@@ -68,13 +78,14 @@ public class MotionFragment extends Fragment {
                 }
 
 
-                Tweede fase, beweging registreren
-                Button staat op "START"
+               // Tweede fase, beweging registreren
+               // Button staat op "START"
 
                 if(!hasStarted && !isFase1){
+                    motionStatus.setText("Fase 2: record gesture");
                     startStopButton.setText("STOP");
                     //zelf stoppen wanneer tijd om is
-                    registerMotion();
+                    registerMotion(v.getContext());
 
                 }
 
@@ -86,10 +97,38 @@ public class MotionFragment extends Fragment {
 
 
         });
-        */
+
         return view;
     }
 
-    private void registerMotion(){
+    private void registerMotion(Context context){
+        // Action to record data
+        DataReceiver receiver = new DataReceiver();
+        long interval = 50*1000000; // TODO duration convert to ms
+        int count = 1; // TODO  is dit nodig?
+
+        DeviceGestureLibrary.recordGesture(context, interval, count, receiver);
+
+        // Create axis for gesture model
+        float[] frontAxisRecord = {1,2,3,4,5};
+        float requiredProximity = 0.72f; // threshold for detection
+        CompareMode mode = CompareMode.Flattened; // Mode of axis data comparison
+        Axis frontAxis = new Axis(frontAxisRecord,requiredProximity,mode);
+
+        float[] sideAxisRecord = {1,2,3,4,5};
+        Axis sideAxis = new Axis(sideAxisRecord,requiredProximity,mode);
+
+        float[] vertAxisRecord = {1,2,3,4,5};
+        Axis vertAxis = new Axis(vertAxisRecord,requiredProximity,mode);
+
+        int id = 100;
+        // Gestude id
+        long cooldown = 1000 * 1000000; //Idleness interval after detection event in nanoseconds (1000ms)
+        long deviation = 200 * 1000000; //Possible deviation of total duration in nanoseconds (200ms)
+
+        DeviceGestureModel model = new DeviceGestureModel(id, frontAxis, sideAxis, vertAxis, interval, cooldown, deviation);
+
+
+        //TODO ADD TO DATABASE
     }
 }
