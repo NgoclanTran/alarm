@@ -51,7 +51,7 @@ public class MotionFragment extends Fragment {
             @TargetApi(Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
-                long elapsedTime = 0;
+                long duration = 0;
 
 
                 // Eerste fase, bepaal hoe lang een beweging duurt
@@ -73,7 +73,7 @@ public class MotionFragment extends Fragment {
                     hasStarted = false;
                     Chronometer chrono = v.findViewById(R.id.chrono);
                     chrono.stop();
-                    elapsedTime =chrono.getBase();
+                    duration =chrono.getBase();
 
                 }
 
@@ -85,7 +85,7 @@ public class MotionFragment extends Fragment {
                     motionStatus.setText("Fase 2: record gesture");
                     startStopButton.setText("STOP");
                     //zelf stoppen wanneer tijd om is
-                    registerMotion(v.getContext());
+                    registerMotion(v.getContext(),duration);
 
                 }
 
@@ -101,28 +101,27 @@ public class MotionFragment extends Fragment {
         return view;
     }
 
-    private void registerMotion(Context context){
+    private void registerMotion(Context context,long duration){
         // Action to record data
         DataReceiver receiver = new DataReceiver();
-        long interval = 50*1000000; // TODO duration convert to ms
-        int count = 1; // TODO  is dit nodig?
+        long interval = 50*1000000;
+        int count =(int) (duration / interval);
 
         DeviceGestureLibrary.recordGesture(context, interval, count, receiver);
 
         // Create axis for gesture model
-        float[] frontAxisRecord = {1,2,3,4,5};
+        float[] frontAxisRecord = receiver.getFront();
         float requiredProximity = 0.72f; // threshold for detection
         CompareMode mode = CompareMode.Flattened; // Mode of axis data comparison
         Axis frontAxis = new Axis(frontAxisRecord,requiredProximity,mode);
 
-        float[] sideAxisRecord = {1,2,3,4,5};
+        float[] sideAxisRecord = receiver.getSide();
         Axis sideAxis = new Axis(sideAxisRecord,requiredProximity,mode);
 
-        float[] vertAxisRecord = {1,2,3,4,5};
+        float[] vertAxisRecord = receiver.getVert();
         Axis vertAxis = new Axis(vertAxisRecord,requiredProximity,mode);
 
-        int id = 100;
-        // Gestude id
+        int id = 100; // TODO gebruiker moet naam geven, nog niet in design
         long cooldown = 1000 * 1000000; //Idleness interval after detection event in nanoseconds (1000ms)
         long deviation = 200 * 1000000; //Possible deviation of total duration in nanoseconds (200ms)
 
