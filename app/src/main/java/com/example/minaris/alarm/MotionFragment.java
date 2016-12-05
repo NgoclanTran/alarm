@@ -43,7 +43,7 @@ public class MotionFragment extends Fragment {
         hasStarted = false;
         isFase1 = true;
         final Button startStopButton = (Button) view.findViewById(R.id.startStopButton);
-        final TextView motionStatus = view.findViewById(R.id.motionStatus);
+        final TextView motionStatus = (TextView) view.findViewById(R.id.motionStatus);
         motionStatus.setText("Fase 1: measure duration of motion");
       //  chronometer = new Chronometer(this);
 
@@ -60,7 +60,7 @@ public class MotionFragment extends Fragment {
                 if(!hasStarted && isFase1) {
                     startStopButton.setText("Stop");
                     hasStarted = true;
-                    Chronometer chrono = v.findViewById(R.id.chrono);
+                    Chronometer chrono = (Chronometer) v.findViewById(R.id.chrono);
                     chrono.start();
                 }
 
@@ -71,7 +71,7 @@ public class MotionFragment extends Fragment {
                 if(hasStarted && isFase1){
                     startStopButton.setText("Start");
                     hasStarted = false;
-                    Chronometer chrono = v.findViewById(R.id.chrono);
+                    Chronometer chrono = (Chronometer) v.findViewById(R.id.chrono);
                     chrono.stop();
                     duration =chrono.getBase();
 
