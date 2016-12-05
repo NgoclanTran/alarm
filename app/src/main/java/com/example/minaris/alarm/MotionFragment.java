@@ -39,7 +39,7 @@ public class MotionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_motion, viewGroup, false);
+        final View view = inflater.inflate(R.layout.fragment_motion, viewGroup, false);
         hasStarted = false;
         isFase1 = true;
         final Button startStopButton = (Button) view.findViewById(R.id.startStopButton);
@@ -60,7 +60,7 @@ public class MotionFragment extends Fragment {
                 if(!hasStarted && isFase1) {
                     startStopButton.setText("Stop");
                     hasStarted = true;
-                    Chronometer chrono = (Chronometer) v.findViewById(R.id.chrono);
+                    Chronometer chrono = (Chronometer) view.findViewById(R.id.chrono);
                     chrono.start();
                 }
 
@@ -71,7 +71,7 @@ public class MotionFragment extends Fragment {
                 if(hasStarted && isFase1){
                     startStopButton.setText("Start");
                     hasStarted = false;
-                    Chronometer chrono = (Chronometer) v.findViewById(R.id.chrono);
+                    Chronometer chrono = (Chronometer) view.findViewById(R.id.chrono);
                     chrono.stop();
                     duration =chrono.getBase();
 
