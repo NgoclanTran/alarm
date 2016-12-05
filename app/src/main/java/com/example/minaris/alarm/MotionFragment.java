@@ -23,12 +23,13 @@ import info.augury.devicegesturelib.DeviceGestureModel;
  * Created by jodeneve on 23/11/2016.
  */
 
-public class MotionFragment extends Fragment {
+public class MotionFragment extends Fragment implements View.OnClickListener{
 
     private boolean hasStarted;
     private Chronometer chronometer;
     private boolean isFase1;
     public MotionFragment() {}
+	public Button startStopButton;
 
 
     @Override
@@ -42,7 +43,7 @@ public class MotionFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_motion, viewGroup, false);
         hasStarted = false;
         isFase1 = true;
-        final Button startStopButton = (Button) view.findViewById(R.id.startStopButton);
+        startStopButton = (Button) view.findViewById(R.id.startStopButton);
         final TextView motionStatus = (TextView) view.findViewById(R.id.motionStatus);
         motionStatus.setText("Fase 1: measure duration of motion");
 		
@@ -56,7 +57,7 @@ public class MotionFragment extends Fragment {
 	public void onClick(){
 
 	
-		Button startStopButton = (Button) view.findViewById(R.id.startStopButton);
+		
                 long duration = 0;
 
 
