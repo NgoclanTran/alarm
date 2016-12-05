@@ -45,12 +45,18 @@ public class MotionFragment extends Fragment {
         final Button startStopButton = (Button) view.findViewById(R.id.startStopButton);
         final TextView motionStatus = (TextView) view.findViewById(R.id.motionStatus);
         motionStatus.setText("Fase 1: measure duration of motion");
-      //  chronometer = new Chronometer(this);
+		
+		startStopButton.setOnClickListener(this);
 
-      startStopButton.setOnClickListener(new View.OnClickListener() {
-            @TargetApi(Build.VERSION_CODES.M)
-            @Override
-            public void onClick(View v) {
+   
+        return view;
+    }
+	
+	@Override
+	public void onClick(){
+
+	
+		Button startStopButton = (Button) view.findViewById(R.id.startStopButton);
                 long duration = 0;
 
 
@@ -98,8 +104,7 @@ public class MotionFragment extends Fragment {
 
         });
 
-        return view;
-    }
+	}
 
     private void registerMotion(Context context,long duration){
         // Action to record data
