@@ -1,5 +1,7 @@
 package com.example.minaris.alarm;
 
+import android.util.Log;
+
 import info.augury.devicegesturelib.IGestureDetectListener;
 
 /**
@@ -20,5 +22,6 @@ public class SnoozeDetecterListener implements IGestureDetectListener{
     public void onGestureDetected(int gestureID, long timestamp) {
         // This method is called when a gisture is detected
         // Action to do: snooze alarm
+        Log.e("Motion detected ", "Motion with id " + gestureID + " detected for snoozing.");
     }
 }
