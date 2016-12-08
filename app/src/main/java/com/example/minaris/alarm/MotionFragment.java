@@ -1,9 +1,6 @@
 package com.example.minaris.alarm;
 
-import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,14 +10,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ListView;
-import android.widget.TextView;
-
-import com.gc.materialdesign.views.ButtonRectangle;
-
-import info.augury.devicegesturelib.Axis;
-import info.augury.devicegesturelib.CompareMode;
-import info.augury.devicegesturelib.DeviceGestureLibrary;
-import info.augury.devicegesturelib.DeviceGestureModel;
 
 /**
  * Created by jodeneve on 23/11/2016.
@@ -30,7 +19,7 @@ public class MotionFragment extends Fragment{
 
 
     //ArrayList<String> listItems;
-    AlarmAdapter adapter;
+    MotienAdapter adapter;
 
 
     private boolean hasStarted;
@@ -51,22 +40,31 @@ public class MotionFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_alarm, viewGroup, false);
         final ListView lv = (ListView) view.findViewById(R.id.listviewAlarm);
 
-        adapter = new AlarmAdapter(getContext());
+        adapter = new MotienAdapter(getContext());
         lv.setAdapter(adapter);
         lv.setOnItemClickListener(new ListView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 System.out.println("in item on click");
-                AlarmData ad = adapter.getItem(i);
-                Intent intent = new Intent(getContext(), setMotionActivity.class);
-                intent.putExtra("theAlarm", ad);
+                MotienData md = adapter.getItem(i);
+                Intent intent = new Intent(getContext(), SetMotionActivity.class);
+                intent.putExtra("theMotien", md);
                 startActivity(intent);
             }
 
         });
 
        return view;
+    }
+    @Override
+    public void setUserVisibleHint(boolean visible)
+    {
+        super.setUserVisibleHint(visible);
+        if (visible && isResumed())
+        {
+            onResume();
+        }
     }
 
     @Override
@@ -84,7 +82,7 @@ public class MotionFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 //adapter.addData();
-                Intent intent = new Intent(getContext(), setMotionActivity.class);
+                Intent intent = new Intent(getContext(), SetMotionActivity.class);
                 startActivity(intent);
             }
 

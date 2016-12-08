@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.minaris.alarm.AlarmContract.AlarmEntry;
-import com.example.minaris.alarm.AlarmContract.SnoozeEntry;
+import com.example.minaris.alarm.AlarmContract.MotienEntry;
 
 /**
  * Created by jodeneve on 21/11/2016.
@@ -24,11 +24,11 @@ public class AlarmDbHelper extends SQLiteOpenHelper {
             AlarmEntry.ACTIVE + " INTEGER," +
             AlarmEntry.REPEAT + " TEXT)";
 
-    private static final String SQL_CREATE_SNOOZE = "CREATE TABLE " + SnoozeEntry.TABLE_NAME + " (" +
-            SnoozeEntry._ID + " INTEGER PRIMARY KEY," +
-            SnoozeEntry.x + " TEXT," +
-            SnoozeEntry.y + " TEXT," +
-            SnoozeEntry.z + " TEXT )";
+    private static final String SQL_CREATE_SNOOZE = "CREATE TABLE " + MotienEntry.TABLE_NAME + " (" +
+            MotienEntry._ID + " INTEGER PRIMARY KEY," +
+            MotienEntry.x + " TEXT," +
+            MotienEntry.y + " TEXT," +
+            MotienEntry.z + " TEXT )";
 
 
 
