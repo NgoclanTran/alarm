@@ -1,13 +1,10 @@
 package com.example.minaris.alarm;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
@@ -20,8 +17,8 @@ import info.augury.devicegesturelib.DeviceGestureModel;
 /**
  * Created by Minaris on 05-12-16.
  */
-@TargetApi(Build.VERSION_CODES.M)
-public class setMotionActivity  extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+
+public class SetMotionActivity extends AppCompatActivity {
     Context context;
     boolean hasStarted;
     boolean isPhase1;
@@ -31,7 +28,7 @@ public class setMotionActivity  extends AppCompatActivity implements AdapterView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_motion);
+        setContentView(R.layout.activity_setmotien);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         this.context = this;
@@ -44,12 +41,12 @@ public class setMotionActivity  extends AppCompatActivity implements AdapterView
         motionStatus.setText("Fase 1: measure duration of motion");
 
         startStopButton.setOnClickListener(new View.OnClickListener() {
-            @TargetApi(Build.VERSION_CODES.M)
+
             @Override
             public void onClick(View v) {
                 long duration = 0;
                 // Eerste fase, bepaal hoe lang een beweging duurt
-              // Button staat op "START"
+                // Button staat op "START"
 
                 if(!hasStarted && isPhase1) {
                     startStopButton.setText("Stop");
@@ -59,8 +56,8 @@ public class setMotionActivity  extends AppCompatActivity implements AdapterView
                 }
 
 
-               // Eerste fase, bepaal hoe lang een beweging duurt
-               // Button staat op "STOP"
+                // Eerste fase, bepaal hoe lang een beweging duurt
+                // Button staat op "STOP"
 
                 if(hasStarted && isPhase1){
                     startStopButton.setText("Start");
@@ -72,8 +69,8 @@ public class setMotionActivity  extends AppCompatActivity implements AdapterView
                 }
 
 
-               // Tweede fase, beweging registreren
-               // Button staat op "START"
+                // Tweede fase, beweging registreren
+                // Button staat op "START"
 
                 if(!hasStarted && !isPhase1){
                     motionStatus.setText("Fase 2: record gesture");
@@ -89,7 +86,7 @@ public class setMotionActivity  extends AppCompatActivity implements AdapterView
 
 
 
-            });
+        });
 
 
     }
@@ -124,13 +121,5 @@ public class setMotionActivity  extends AppCompatActivity implements AdapterView
         //TODO ADD TO DATABASE
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
 }
+
