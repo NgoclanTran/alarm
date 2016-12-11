@@ -240,7 +240,7 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
             return;
         }
 
-        Log.e("Acc Z", String.valueOf(acceloremeter_listener.az));
+        //Log.e("Acc Z", String.valueOf(acceloremeter_listener.az));
 
         alarm_manager.cancel(pending_intent);
 

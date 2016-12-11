@@ -15,7 +15,7 @@ import android.widget.ListView;
  * Created by jodeneve on 23/11/2016.
  */
 
-public class MotionFragment extends Fragment{
+public class  MotionFragment extends Fragment{
 
 
     //ArrayList<String> listItems;

@@ -1,5 +1,7 @@
 package info.augury.devicegesturelib;
 
+import android.annotation.TargetApi;
+
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -22,6 +24,8 @@ public class Axis implements Serializable {
 	 * assume axis are similar. Must be in range (0;1). See {@link IAxisComparator}   
 	 * @param compareMode Mode of comparison. See {@link CompareMode}
 	 */
+
+	@TargetApi(11)
 	public Axis(float[] values, float requiredProximity, CompareMode compareMode) {
 		if (values.length <= 1) 
 			throw new RuntimeException("Too few measurements");

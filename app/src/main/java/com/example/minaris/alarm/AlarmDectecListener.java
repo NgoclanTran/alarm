@@ -24,6 +24,6 @@ public class AlarmDectecListener implements IGestureDetectListener{
     public void onGestureDetected(int gestureID, long timestamp) {
         // This method is called when a gesture is detected
         // Turn alarm off when this method is called
-        Log.e("Motion detected ", "Motion with id " + gestureID + " detected for turning off.");
+        Log.i("Motion Detected: ",String.valueOf(gestureID));
     }
 }
