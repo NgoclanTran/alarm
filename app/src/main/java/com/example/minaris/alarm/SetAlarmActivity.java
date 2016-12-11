@@ -23,7 +23,9 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TimePicker;
 
+import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Date;
 
 import com.gc.materialdesign.views.ButtonRectangle;
 
@@ -57,6 +59,8 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
         setSupportActionBar(toolbar);
         this.context = this;
 
+        AlarmData data = (AlarmData) this.getIntent().getSerializableExtra("ad");
+
         //Initialize sensor
 
         acceloremeter_listener = AccelerometerListener.getInstance();
@@ -65,14 +69,19 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
         //acceloremeter_listener.getManager().registerListener(acceloremeter_listener, acceloremeter_listener.getSensor(), SensorManager.SENSOR_DELAY_GAME);
 
 
-        // initialize our alarm manager
-        alarm_manager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        if(data != null) {
+            Date hour = data.hour;
+            
+        } else {
+            // create an instance of a calendar
+            calendar = Calendar.getInstance();
+        }
 
         //initialize our timepicker
         alarm_timepicker = (TimePicker) findViewById(R.id.timePicker);
 
-        // create an instance of a calendar
-        calendar = Calendar.getInstance();
+        // initialize our alarm manager
+        alarm_manager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
         // create an intent to the Alarm Receiver class
         my_intent = new Intent(this.context, Alarm_Receiver.class);

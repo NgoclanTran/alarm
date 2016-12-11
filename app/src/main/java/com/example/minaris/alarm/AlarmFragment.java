@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import java.util.ArrayList;
+import java.io.Serializable;
 
 /**
  * Created by jodeneve on 23/11/2016.
@@ -45,7 +46,7 @@ public class AlarmFragment extends Fragment {
                 System.out.println("in item on click");
                 AlarmData ad = adapter.getItem(i);
                 Intent intent = new Intent(getContext(), SetAlarmActivity.class);
-                intent.putExtra("theAlarm", ad);
+                intent.putExtra("theAlarm", (Serializable) ad);
                 startActivity(intent);
             }
 
