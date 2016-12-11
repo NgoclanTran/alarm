@@ -17,7 +17,7 @@ public class DataReceiver implements IGestureRecordReceiver {
         this.side = side;
         this.front = front;
         this.vert = vert;
-        System.out.println(side.length);
+        //System.out.println(side.length);
     }
     public float[] getSide(){
         return side;

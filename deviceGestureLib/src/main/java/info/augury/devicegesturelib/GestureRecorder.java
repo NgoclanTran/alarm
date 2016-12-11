@@ -24,6 +24,7 @@ class GestureRecorder implements IProcessedDataListener {
 		if ((period <= 0)||(count <= 0))
 			throw new IllegalArgumentException();
 
+
 		if (receiver == null)
 			throw new NullPointerException();
 		

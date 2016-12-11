@@ -40,14 +40,14 @@ public class RingtonePlayingService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         accelerometerListener = AccelerometerListener.getInstance();
 
-        Log.i("LocalService", "Received start id " + startId + ": " + intent);
+        //Log.i("LocalService", "Received start id " + startId + ": " + intent);
 
         // fetch the extra string from the alarm on/alarm off values
         String extra = intent.getExtras().getString("extra");
         // fetch the whale choice integer values
         //Integer whale_sound_choice = intent.getExtras().getInt("whale_choice");
 
-        Log.e("Ringtone extra is ", extra);
+        //Log.e("Ringtone extra is ", extra);
 
         // Get the state and id through the extra string in the intent
         String[] splitString = extra.split(":");
@@ -64,7 +64,7 @@ public class RingtonePlayingService extends Service {
                 break;
             case "OFF":
                 startId = 0;
-                Log.e("Start ID is ", state);
+                //Log.e("Start ID is ", state);
                 break;
             default:
                 startId = 0;
@@ -78,7 +78,7 @@ public class RingtonePlayingService extends Service {
         // if there is no music playing, and the user pressed "alarm on"
         // music should start playing
         if (!this.isRunning && startId == 1) {
-            Log.e("there is no music, ", "and you want start");
+            //Log.e("there is no music, ", "and you want start");
 
             media_song = getRingtoneSong();
             media_song.start();
@@ -98,7 +98,7 @@ public class RingtonePlayingService extends Service {
         // if there is music playing, and the user pressed "alarm off"
         // music should stop playing
         else if (this.isRunning && startId == 0) {
-            Log.e("there is music, ", "and you want end");
+            //Log.e("there is music, ", "and you want end");
 
             // stop the ringtone
             media_song.stop();
@@ -118,7 +118,7 @@ public class RingtonePlayingService extends Service {
         // if there is no music playing, and the user pressed "alarm off"
         // do nothing
         else if (!this.isRunning && startId == 0) {
-            Log.e("there is no music, ", "and you want end");
+            //Log.e("there is no music, ", "and you want end");
 
             this.isRunning = false;
             this.startId = 0;
@@ -128,7 +128,7 @@ public class RingtonePlayingService extends Service {
         // if there is music playing and the user pressed "alarm on"
         // do nothing
         else if (this.isRunning && startId == 1) {
-            Log.e("there is music, ", "and you want start");
+            //Log.e("there is music, ", "and you want start");
 
             this.isRunning = true;
             this.startId = 1;
@@ -137,7 +137,7 @@ public class RingtonePlayingService extends Service {
 
         // can't think of anything else, just to catch the odd event
         else {
-            Log.e("else ", "somehow you reached this");
+            //Log.e("else ", "somehow you reached this");
 
         }
 
@@ -149,7 +149,7 @@ public class RingtonePlayingService extends Service {
     @Override
     public void onDestroy() {
         // Tell the user we stopped.
-        Log.e("on Destroy called", "ta da");
+        //Log.e("on Destroy called", "ta da");
 
         super.onDestroy();
         this.isRunning = false;
