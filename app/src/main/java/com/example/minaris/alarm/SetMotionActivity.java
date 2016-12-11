@@ -187,7 +187,7 @@ public class SetMotionActivity extends AppCompatActivity{
 
         System.out.println("Front axis: " +  frontAxisRecord.length);
 
-        float requiredProximity = 0.72f; // threshold for detection
+        float requiredProximity = 0.5f; // threshold for detection
         CompareMode mode = CompareMode.Flattened; // Mode of axis data comparison
         Axis frontAxis = new Axis(frontAxisRecord,requiredProximity,mode);
 
