@@ -91,7 +91,7 @@ public class SetMotionActivity extends AppCompatActivity{
                     //Action to record data
                     receiver = new DataReceiver();
                     Log.e("DataReceiver: ","created");
-                    interval = 5 * 1000000; //Interval between measures in nanoseconds (5ms)
+                    interval = 120 * 1000000; //Interval between measures in nanoseconds (5ms)
                     int count = 10;
                     Log.e("Interval: ", String.valueOf(interval));
 
