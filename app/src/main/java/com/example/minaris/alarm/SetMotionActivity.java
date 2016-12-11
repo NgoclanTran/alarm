@@ -91,7 +91,7 @@ public class SetMotionActivity extends AppCompatActivity {
                     Log.e("Interval: ", String.valueOf(interval));
 
 
-                    DeviceGestureLibrary.recordGesture(context, interval, count, receiver);
+                    DeviceGestureLibrary.recordGesture(getApplicationContext(), interval, count, receiver);
 
 
                 }
@@ -169,7 +169,7 @@ public class SetMotionActivity extends AppCompatActivity {
     }
 
     private void registerMotion(Context context,long duration){
-      //
+        //
 
         // Create axis for gesture model
         float[] frontAxisRecord = receiver.getFront();
@@ -177,7 +177,7 @@ public class SetMotionActivity extends AppCompatActivity {
             System.out.println("Axis null");
 
 
-      //  System.out.println("Front axis: " +  frontAxisRecord.length);
+        //  System.out.println("Front axis: " +  frontAxisRecord.length);
     /*
         float requiredProximity = 0.72f; // threshold for detection
         CompareMode mode = CompareMode.Flattened; // Mode of axis data comparison
@@ -207,4 +207,5 @@ public class SetMotionActivity extends AppCompatActivity {
     }
 
 }
+
 
