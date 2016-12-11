@@ -72,9 +72,6 @@ public class SetMotionActivity extends AppCompatActivity {
                     motionStatus.setText("Phase 2 : record gesture");
                     startButton.setText("START");
 
-
-
-
                 }else if(!isPhase1 & !hasStarted){
                     Log.e("Status: ", "fase 2 gestart");
                     startButton.setText("STOP");
