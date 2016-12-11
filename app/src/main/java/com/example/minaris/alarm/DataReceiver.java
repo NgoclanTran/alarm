@@ -1,5 +1,7 @@
 package com.example.minaris.alarm;
 
+import android.util.Log;
+
 import info.augury.devicegesturelib.IGestureRecordReceiver;
 
 /**
@@ -19,6 +21,7 @@ public class DataReceiver implements IGestureRecordReceiver {
 
     @Override
     public void onResults(float[] side, float[] front, float[] vert) {
+        Log.e("Receiver called: ","onResults");
         this.side = side;
         this.front = front;
         this.vert = vert;

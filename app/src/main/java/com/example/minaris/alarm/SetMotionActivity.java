@@ -17,15 +17,19 @@ import info.augury.devicegesturelib.CompareMode;
 import info.augury.devicegesturelib.DeviceGestureLibrary;
 import info.augury.devicegesturelib.DeviceGestureModel;
 import info.augury.devicegesturelib.IGestureDetector;
-
-
+import info.augury.devicegesturelib.IGestureRecordReceiver;
 
 
 /**
  * Created by Minaris on 05-12-16.
  */
 
-public class SetMotionActivity extends AppCompatActivity {
+public class SetMotionActivity extends AppCompatActivity{
+    float[] front;
+    float[] side;
+    float[] vert;
+
+
     Context context;
     boolean hasStarted;
     boolean isPhase1;
@@ -33,6 +37,8 @@ public class SetMotionActivity extends AppCompatActivity {
     TextView motionStatus;
     long tStart;
     long tEnd;
+    long interval = 0; // duration before next measurement (measured in nanoseconds)
+    long duration = 0; // duration of gesutre  (measured in nanoseconds)
     DataReceiver receiver;
 
     DeviceGestureModel testModel;
@@ -85,13 +91,12 @@ public class SetMotionActivity extends AppCompatActivity {
                     //Action to record data
                     receiver = new DataReceiver();
                     Log.e("DataReceiver: ","created");
-                    long interval = 50*1000000;
-                    //int count =(int) (duration / interval);
+                    interval = 5 * 1000000; //Interval between measures in nanoseconds (5ms)
                     int count = 10;
                     Log.e("Interval: ", String.valueOf(interval));
 
 
-                    DeviceGestureLibrary.recordGesture(getApplicationContext(), interval, count, receiver);
+                    DeviceGestureLibrary.recordGesture(context, interval, count,receiver);
 
 
                 }
@@ -152,18 +157,22 @@ public class SetMotionActivity extends AppCompatActivity {
 
         });
 
-//        Button test = (Button) findViewById(R.id.testDetect);
-//        test.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                IGestureDetector detector = DeviceGestureLibrary.createGestureDetector(context);
-//                AlarmDectecListener listener = new AlarmDectecListener();
-//                detector.registerGestureDetection(testModel,listener);
-//
-//
-//            }
-//        });
+        Button test = (Button) findViewById(R.id.testDetect);
+        test.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Log.e("Test Dectecion: ","Try detect gesture");
+                IGestureDetector detector = DeviceGestureLibrary.createGestureDetector(context);
+
+                AlarmDectecListener listener = new AlarmDectecListener();
+//                if(listener == null)
+//                    Log.e("Listener: ","null");
+                detector.registerGestureDetection(testModel,listener);
+
+
+            }
+        });
 
 
     }
@@ -176,9 +185,8 @@ public class SetMotionActivity extends AppCompatActivity {
         if(frontAxisRecord == null)
             System.out.println("Axis null");
 
+        System.out.println("Front axis: " +  frontAxisRecord.length);
 
-        //  System.out.println("Front axis: " +  frontAxisRecord.length);
-    /*
         float requiredProximity = 0.72f; // threshold for detection
         CompareMode mode = CompareMode.Flattened; // Mode of axis data comparison
         Axis frontAxis = new Axis(frontAxisRecord,requiredProximity,mode);
@@ -203,7 +211,7 @@ public class SetMotionActivity extends AppCompatActivity {
         testModel = model;
 
         //TODO ADD TO DATABASE
-        */
+
     }
 
 }
