@@ -12,6 +12,9 @@ public class DataReceiver implements IGestureRecordReceiver {
     private float[] side;
     private float[] front;
     private float[] vert;
+    public DataReceiver(){
+
+    }
     @Override
     public void onResults(float[] side, float[] front, float[] vert) {
         this.side = side;

@@ -33,6 +33,7 @@ public class SetMotionActivity extends AppCompatActivity {
     TextView motionStatus;
     long tStart;
     long tEnd;
+    DataReceiver receiver;
 
     DeviceGestureModel testModel;
 
@@ -49,27 +50,57 @@ public class SetMotionActivity extends AppCompatActivity {
         isPhase1 = true;
         startButton = (Button) findViewById(R.id.startStopButton);
         motionStatus = (TextView) findViewById(R.id.motionStatus);
-        motionStatus.setText("Fase 1: measure duration of motion");
+        motionStatus.setText("Phase 1: measure duration of motion");
 
 
         startButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                if(isPhase1){
-                    motionStatus.setText("Phase 1: start record duration!");
-                    isPhase1 = false;
+                Log.e("Status: ", "Fase 1 gestart");
+                if(isPhase1 & !hasStarted){
+                    hasStarted = true;
                     tStart = System.currentTimeMillis();
                     startButton.setText("STOP");
 
-                }else{
-                    motionStatus.setText("Phase 2: record motion");
-                    isPhase1 = true;
+
+                }else if(isPhase1 & hasStarted){
+                    Log.e("Status: ", "fase 1 gestopt");
+                    isPhase1 = false;
+                    hasStarted = false;
                     tEnd = System.currentTimeMillis();
-                    long duration = (tEnd - tStart)/1000;
-                    System.out.println(String.valueOf(duration));
+                    motionStatus.setText("Phase 2 : record gesture");
+                    startButton.setText("START");
+
+
+
+
+                }else if(!isPhase1 & !hasStarted){
+                    Log.e("Status: ", "fase 2 gestart");
+                    startButton.setText("STOP");
+                    hasStarted = true;
+
+                    long duration = (tEnd - tStart)/100;
+                    //System.out.println(String.valueOf(duration));
                     Log.e("Duration: ", String.valueOf(duration));
                     motionStatus.setText(String.valueOf(duration));
+
+                    //Action to record data
+                    receiver = new DataReceiver();
+                    Log.e("DataReceiver: ","created");
+                    long interval = 50*1000000;
+                    //int count =(int) (duration / interval);
+                    int count = 10;
+                    Log.e("Interval: ", String.valueOf(interval));
+
+
+                    DeviceGestureLibrary.recordGesture(context, interval, count, receiver);
+
+
+                }
+                else{
+                    Log.e("Status: ", "fase 2 gestopt");
+                    long duration = (tEnd - tStart)/100;
                     registerMotion(v.getContext(),duration);
                 }
 
@@ -141,16 +172,16 @@ public class SetMotionActivity extends AppCompatActivity {
     }
 
     private void registerMotion(Context context,long duration){
-        // Action to record data
-        DataReceiver receiver = new DataReceiver();
-        long interval = 50*1000000;
-        //int count =(int) (duration / interval);
-        int count = 10;
-
-        DeviceGestureLibrary.recordGesture(context, interval, count, receiver);
+      //
 
         // Create axis for gesture model
         float[] frontAxisRecord = receiver.getFront();
+        if(frontAxisRecord == null)
+            System.out.println("Axis null");
+
+
+      //  System.out.println("Front axis: " +  frontAxisRecord.length);
+    /*
         float requiredProximity = 0.72f; // threshold for detection
         CompareMode mode = CompareMode.Flattened; // Mode of axis data comparison
         Axis frontAxis = new Axis(frontAxisRecord,requiredProximity,mode);
@@ -165,10 +196,17 @@ public class SetMotionActivity extends AppCompatActivity {
         long cooldown = 1000 * 1000000; //Idleness interval after detection event in nanoseconds (1000ms)
         long deviation = 200 * 1000000; //Possible deviation of total duration in nanoseconds (200ms)
 
+        System.out.println("Front axis: " +  frontAxis.toString());
+        System.out.println("Side axis: " + sideAxis.toString());
+        System.out.println("Vert axis: " + vertAxis.toString());
+
+
+
         DeviceGestureModel model = new DeviceGestureModel(id, frontAxis, sideAxis, vertAxis, interval, cooldown, deviation);
         testModel = model;
 
         //TODO ADD TO DATABASE
+        */
     }
 
 }
