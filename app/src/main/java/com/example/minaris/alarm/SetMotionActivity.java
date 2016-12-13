@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.util.Log;
@@ -42,15 +43,16 @@ public class SetMotionActivity extends AppCompatActivity {
     Context context;
     boolean hasStarted;
     boolean isPhase1;
+
     Button startButton;
+    TextView taskText;
     TextView motionStatus;
     long tStart;
     long tEnd;
-    long interval = 0; // duration before next measurement (measured in nanoseconds)
+    long interval = 4 * 100000; //Interval between measures in nanoseconds (5ms)
     long duration = 0; // duration of gesutre  (measured in nanoseconds)
     DataReceiver receiver;
 
-    DeviceGestureModel testModel;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -82,7 +84,11 @@ public class SetMotionActivity extends AppCompatActivity {
         isPhase1 = true;
         startButton = (Button) findViewById(R.id.startStopButton);
         motionStatus = (TextView) findViewById(R.id.motionStatus);
-        motionStatus.setText("Phase 1: measure duration of motion");
+        motionStatus.setText("Phase 1");
+
+        taskText = (TextView) findViewById(R.id.taskText);
+        taskText.setText("record time of gesture");
+
 
 
         startButton.setOnClickListener(new View.OnClickListener() {
@@ -92,7 +98,7 @@ public class SetMotionActivity extends AppCompatActivity {
                 Log.e("Status: ", "Fase 1 gestart");
                 if (isPhase1 & !hasStarted) {
                     hasStarted = true;
-                    tStart = System.currentTimeMillis();
+                    tStart = System.nanoTime();
                     startButton.setText("STOP");
 
 
@@ -100,11 +106,13 @@ public class SetMotionActivity extends AppCompatActivity {
                     Log.e("Status: ", "fase 1 gestopt");
                     isPhase1 = false;
                     hasStarted = false;
-                    tEnd = System.currentTimeMillis();
-                    motionStatus.setText("Phase 2 : record gesture");
+                    tEnd = System.nanoTime();
+                    motionStatus.setText("Phase 2");
+                    taskText.setText("record gesture, click start");
                     startButton.setText("START");
 
                 } else if (!isPhase1 & !hasStarted) {
+                    taskText.setText("Do gesture again");
                     Log.e("Status: ", "fase 2 gestart");
                     startButton.setText("STOP");
                     hasStarted = true;
@@ -117,8 +125,9 @@ public class SetMotionActivity extends AppCompatActivity {
                     //Action to record data
                     receiver = new DataReceiver();
                     Log.e("DataReceiver: ", "created");
-                    interval = 120 * 1000000; //Interval between measures in nanoseconds (5ms)
-                    int count = 10;
+                    Log.e("Duration: ", String.valueOf(duration));
+                    int count = (int) (duration/interval);
+                    Log.e("Count: ", String.valueOf(count));
                     Log.e("Interval: ", String.valueOf(interval));
 
 
@@ -126,77 +135,32 @@ public class SetMotionActivity extends AppCompatActivity {
 
 
                 } else {
+                    taskText.setText("Finished");
                     Log.e("Status: ", "fase 2 gestopt");
-                    long duration = (tEnd - tStart) / 100;
+                    long duration = tEnd - tStart;
                     registerMotion(v.getContext(), duration);
                 }
 
 
             }
+        });
 
-//                long duration = 0;
-//                // Eerste fase, bepaal hoe lang een beweging duurt
-//                // Button staat op "START"
-//                System.out.println("START BUTTON CLICKED");
+//        Button test = (Button) findViewById(R.id.testDetect);
+//        test.setOnClickListener(new View.OnClickListener() {
 //
-//                if(!hasStarted && isPhase1) {
-//                    startStopButton.setText("Stop");
-//                    hasStarted = true;
-//                    Chronometer chrono = (Chronometer) findViewById(R.id.chrono);
-//                    chrono.setBase(SystemClock.elapsedRealtime());
-//                    chrono.start();
-//                    System.out.println("START");
-//                }
+//            @Override
+//            public void onClick(View v) {
+//                Log.e("Test Dectecion: ", "Try detect gesture");
+//                detector = DeviceGestureLibrary.createGestureDetector(context);
 //
-//
-//                // Eerste fase, bepaal hoe lang een beweging duurt
-//                // Button staat op "STOP"
-//
-//                if(hasStarted && isPhase1){
-//                    startStopButton.setText("Start");
-//                    hasStarted = false;
-//                    Chronometer chrono = (Chronometer) findViewById(R.id.chrono);
-//                    chrono.stop();
-//                    duration =chrono.getBase();
-//                    System.out.println("STOP");
-//
-//                }
-//
-//
-//                // Tweede fase, beweging registreren
-//                // Button staat op "START"
-//
-//                if(!hasStarted && !isPhase1){
-//                    motionStatus.setText("Fase 2: record gesture");
-//                    startStopButton.setText("STOP");
-//                    //zelf stoppen wanneer tijd om is
-//                    registerMotion(v.getContext(),duration);
-//
-//                }
+//                RingtonePlayingService listener = new RingtonePlayingService();
+////                if(listener == null)
+////                    Log.e("Listener: ","null");
+//                detector.registerGestureDetection(testModel, listener);
 //
 //
 //            }
-//
-
-
-        });
-
-        Button test = (Button) findViewById(R.id.testDetect);
-        test.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Log.e("Test Dectecion: ", "Try detect gesture");
-                IGestureDetector detector = DeviceGestureLibrary.createGestureDetector(context);
-
-                RingtonePlayingService listener = new RingtonePlayingService();
-//                if(listener == null)
-//                    Log.e("Listener: ","null");
-                detector.registerGestureDetection(testModel, listener);
-
-
-            }
-        });
+//        });
 
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -224,7 +188,8 @@ public class SetMotionActivity extends AppCompatActivity {
         float[] vertAxisRecord = receiver.getVert();
         Axis vertAxis = new Axis(vertAxisRecord, requiredProximity, mode);
 
-        int id = 100; // TODO gebruiker moet naam geven, nog niet in design
+        EditText idEditText = (EditText) findViewById(R.id.motionID);
+        int id = Integer.parseInt(idEditText.getText().toString());
         long cooldown = 1000 * 1000000; //Idleness interval after detection event in nanoseconds (1000ms)
         long deviation = 200 * 1000000; //Possible deviation of total duration in nanoseconds (200ms)
 
@@ -236,7 +201,7 @@ public class SetMotionActivity extends AppCompatActivity {
         //DeviceGestureModel model = new DeviceGestureModel(id, frontAxis, sideAxis, vertAxis, interval, cooldown, deviation);
         //testModel = model;
 
-        addMotionToDatabase(id, frontAxisRecord, sideAxisRecord, vertAxisRecord, interval);
+        addMotionToDatabase(id, frontAxisRecord, sideAxisRecord, vertAxisRecord);
 
     }
 
@@ -276,7 +241,7 @@ public class SetMotionActivity extends AppCompatActivity {
         client.disconnect();
     }
 
-    public void addMotionToDatabase(int id, float[] fA, float[] sA, float[] vA, long interval){
+    public void addMotionToDatabase(int id, float[] fA, float[] sA, float[] vA){
         String stringFA = Arrays.toString(fA);
         String stringSA = Arrays.toString(sA);
         String stringVA = Arrays.toString(vA);
