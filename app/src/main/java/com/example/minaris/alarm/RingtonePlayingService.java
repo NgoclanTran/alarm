@@ -10,8 +10,10 @@ import android.os.IBinder;
 import android.util.Log;
 import android.hardware.SensorManager;
 
+import info.augury.devicegesturelib.IGestureDetectListener;
 
-public class RingtonePlayingService extends Service {
+
+public class RingtonePlayingService extends Service implements IGestureDetectListener{
 
     MediaPlayer media_song;
     int startId;
@@ -175,5 +177,9 @@ public class RingtonePlayingService extends Service {
     }
 
 
-
+    public void onGestureDetected(int gestureID, long timestamp) {
+        // This method is called when a gesture is detected
+        // Turn alarm off when this method is called
+        Log.i("Motion Detected: ",String.valueOf(gestureID));
+    }
 }

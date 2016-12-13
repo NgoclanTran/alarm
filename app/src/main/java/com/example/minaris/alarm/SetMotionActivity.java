@@ -1,6 +1,5 @@
 package com.example.minaris.alarm;
 
-import com.example.minaris.alarm.AlarmDectecListener;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
@@ -12,13 +11,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Chronometer;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.os.SystemClock;
 import android.util.Log;
 
 import info.augury.devicegesturelib.Axis;
@@ -26,7 +22,6 @@ import info.augury.devicegesturelib.CompareMode;
 import info.augury.devicegesturelib.DeviceGestureLibrary;
 import info.augury.devicegesturelib.DeviceGestureModel;
 import info.augury.devicegesturelib.IGestureDetector;
-import info.augury.devicegesturelib.IGestureRecordReceiver;
 
 
 /**
@@ -182,7 +177,7 @@ public class SetMotionActivity extends AppCompatActivity {
                 Log.e("Test Dectecion: ", "Try detect gesture");
                 IGestureDetector detector = DeviceGestureLibrary.createGestureDetector(context);
 
-                AlarmDectecListener listener = new AlarmDectecListener();
+                RingtonePlayingService listener = new RingtonePlayingService();
 //                if(listener == null)
 //                    Log.e("Listener: ","null");
                 detector.registerGestureDetection(testModel, listener);
