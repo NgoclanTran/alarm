@@ -1,13 +1,22 @@
 package com.example.minaris.alarm;
 
 import com.example.minaris.alarm.AlarmDectecListener;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.os.SystemClock;
 import android.util.Log;
@@ -24,7 +33,7 @@ import info.augury.devicegesturelib.IGestureRecordReceiver;
  * Created by Minaris on 05-12-16.
  */
 
-public class SetMotionActivity extends AppCompatActivity{
+public class SetMotionActivity extends AppCompatActivity {
     float[] front;
     float[] side;
     float[] vert;
@@ -42,6 +51,11 @@ public class SetMotionActivity extends AppCompatActivity{
     DataReceiver receiver;
 
     DeviceGestureModel testModel;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +65,11 @@ public class SetMotionActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
         this.context = this;
 
+
+        Spinner dropdown = (Spinner) findViewById(R.id.spinner);
+        String[] items = new String[]{"Short duration (120 ms)", "Long duration (200 ms)"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        dropdown.setAdapter(adapter);
 
         hasStarted = false;
         isPhase1 = true;
@@ -64,13 +83,13 @@ public class SetMotionActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Log.e("Status: ", "Fase 1 gestart");
-                if(isPhase1 & !hasStarted){
+                if (isPhase1 & !hasStarted) {
                     hasStarted = true;
                     tStart = System.currentTimeMillis();
                     startButton.setText("STOP");
 
 
-                }else if(isPhase1 & hasStarted){
+                } else if (isPhase1 & hasStarted) {
                     Log.e("Status: ", "fase 1 gestopt");
                     isPhase1 = false;
                     hasStarted = false;
@@ -78,32 +97,31 @@ public class SetMotionActivity extends AppCompatActivity{
                     motionStatus.setText("Phase 2 : record gesture");
                     startButton.setText("START");
 
-                }else if(!isPhase1 & !hasStarted){
+                } else if (!isPhase1 & !hasStarted) {
                     Log.e("Status: ", "fase 2 gestart");
                     startButton.setText("STOP");
                     hasStarted = true;
 
-                    long duration = (tEnd - tStart)/100;
+                    long duration = (tEnd - tStart) / 100;
                     //System.out.println(String.valueOf(duration));
                     Log.e("Duration: ", String.valueOf(duration));
                     motionStatus.setText(String.valueOf(duration));
 
                     //Action to record data
                     receiver = new DataReceiver();
-                    Log.e("DataReceiver: ","created");
+                    Log.e("DataReceiver: ", "created");
                     interval = 120 * 1000000; //Interval between measures in nanoseconds (5ms)
                     int count = 10;
                     Log.e("Interval: ", String.valueOf(interval));
 
 
-                    DeviceGestureLibrary.recordGesture(context, interval, count,receiver);
+                    DeviceGestureLibrary.recordGesture(context, interval, count, receiver);
 
 
-                }
-                else{
+                } else {
                     Log.e("Status: ", "fase 2 gestopt");
-                    long duration = (tEnd - tStart)/100;
-                    registerMotion(v.getContext(),duration);
+                    long duration = (tEnd - tStart) / 100;
+                    registerMotion(v.getContext(), duration);
                 }
 
 
@@ -154,7 +172,6 @@ public class SetMotionActivity extends AppCompatActivity{
 //
 
 
-
         });
 
         Button test = (Button) findViewById(R.id.testDetect);
@@ -162,49 +179,51 @@ public class SetMotionActivity extends AppCompatActivity{
 
             @Override
             public void onClick(View v) {
-                Log.e("Test Dectecion: ","Try detect gesture");
+                Log.e("Test Dectecion: ", "Try detect gesture");
                 IGestureDetector detector = DeviceGestureLibrary.createGestureDetector(context);
 
                 AlarmDectecListener listener = new AlarmDectecListener();
 //                if(listener == null)
 //                    Log.e("Listener: ","null");
-                detector.registerGestureDetection(testModel,listener);
+                detector.registerGestureDetection(testModel, listener);
 
 
             }
         });
 
 
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    private void registerMotion(Context context,long duration){
+    private void registerMotion(Context context, long duration) {
         //
 
         // Create axis for gesture model
         float[] frontAxisRecord = receiver.getFront();
-        if(frontAxisRecord == null)
+        if (frontAxisRecord == null)
             System.out.println("Axis null");
 
-        System.out.println("Front axis: " +  frontAxisRecord.length);
+        System.out.println("Front axis: " + frontAxisRecord.length);
 
         float requiredProximity = 0.5f; // threshold for detection
         CompareMode mode = CompareMode.Flattened; // Mode of axis data comparison
-        Axis frontAxis = new Axis(frontAxisRecord,requiredProximity,mode);
+        Axis frontAxis = new Axis(frontAxisRecord, requiredProximity, mode);
 
         float[] sideAxisRecord = receiver.getSide();
-        Axis sideAxis = new Axis(sideAxisRecord,requiredProximity,mode);
+        Axis sideAxis = new Axis(sideAxisRecord, requiredProximity, mode);
 
         float[] vertAxisRecord = receiver.getVert();
-        Axis vertAxis = new Axis(vertAxisRecord,requiredProximity,mode);
+        Axis vertAxis = new Axis(vertAxisRecord, requiredProximity, mode);
 
         int id = 100; // TODO gebruiker moet naam geven, nog niet in design
         long cooldown = 1000 * 1000000; //Idleness interval after detection event in nanoseconds (1000ms)
         long deviation = 200 * 1000000; //Possible deviation of total duration in nanoseconds (200ms)
 
-        System.out.println("Front axis: " +  frontAxis.toString());
+        System.out.println("Front axis: " + frontAxis.toString());
         System.out.println("Side axis: " + sideAxis.toString());
         System.out.println("Vert axis: " + vertAxis.toString());
-
 
 
         DeviceGestureModel model = new DeviceGestureModel(id, frontAxis, sideAxis, vertAxis, interval, cooldown, deviation);
@@ -214,6 +233,41 @@ public class SetMotionActivity extends AppCompatActivity{
 
     }
 
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("SetMotion Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
+    }
 }
 
 
