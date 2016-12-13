@@ -96,7 +96,7 @@ public class RingtonePlayingService extends Service implements IGestureDetectLis
         // if there is no music playing, and the user pressed "alarm on"
         // music should start playing
         if (!this.isRunning && startId == 1) {
-            //Log.e("there is no music, ", "and you want start");
+            Log.e("there is no music, ", "and you want start");
 
             media_song = getRingtoneSong();
             media_song.start();
@@ -194,6 +194,14 @@ public class RingtonePlayingService extends Service implements IGestureDetectLis
         // This method is called when a gesture is detected
         // Turn alarm off when this method is called
         Log.i("Motion Detected: ",String.valueOf(gestureID));
+
+        media_song.stop();
+        media_song.reset();
+
+        this.isRunning = false;
+        this.startId = 0;
+
+        detector.close();
     }
 
     public void startGestureListener() {
@@ -235,7 +243,7 @@ public class RingtonePlayingService extends Service implements IGestureDetectLis
 
     public float[] parseAxis(String axis) {
         float [] res;
-        String [] axisString = axis.substring(1,-1).split(",");
+        String [] axisString = axis.substring(1,axis.length()-1).split(",");
         res = new float[axisString.length];
         for (int i = 0; i < axisString.length; i++) {
             res[i] = Float.parseFloat(axisString[i]);
