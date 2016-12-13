@@ -42,17 +42,16 @@ public class SetMotionActivity extends AppCompatActivity {
     Context context;
     boolean hasStarted;
     boolean isPhase1;
+
     Button startButton;
     TextView taskText;
     TextView motionStatus;
     long tStart;
     long tEnd;
-    long interval = 0; // duration before next measurement (measured in nanoseconds)
+    long interval = 120 * 1000000; //Interval between measures in nanoseconds (5ms)
     long duration = 0; // duration of gesutre  (measured in nanoseconds)
     DataReceiver receiver;
-    IGestureDetector detector;
 
-    DeviceGestureModel testModel;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -125,7 +124,6 @@ public class SetMotionActivity extends AppCompatActivity {
                     //Action to record data
                     receiver = new DataReceiver();
                     Log.e("DataReceiver: ", "created");
-                    interval = 120 * 1000000; //Interval between measures in nanoseconds (5ms)
                     int count = 10;
                     Log.e("Interval: ", String.valueOf(interval));
 
@@ -142,70 +140,24 @@ public class SetMotionActivity extends AppCompatActivity {
 
 
             }
+        });
 
-//                long duration = 0;
-//                // Eerste fase, bepaal hoe lang een beweging duurt
-//                // Button staat op "START"
-//                System.out.println("START BUTTON CLICKED");
+//        Button test = (Button) findViewById(R.id.testDetect);
+//        test.setOnClickListener(new View.OnClickListener() {
 //
-//                if(!hasStarted && isPhase1) {
-//                    startStopButton.setText("Stop");
-//                    hasStarted = true;
-//                    Chronometer chrono = (Chronometer) findViewById(R.id.chrono);
-//                    chrono.setBase(SystemClock.elapsedRealtime());
-//                    chrono.start();
-//                    System.out.println("START");
-//                }
+//            @Override
+//            public void onClick(View v) {
+//                Log.e("Test Dectecion: ", "Try detect gesture");
+//                detector = DeviceGestureLibrary.createGestureDetector(context);
 //
-//
-//                // Eerste fase, bepaal hoe lang een beweging duurt
-//                // Button staat op "STOP"
-//
-//                if(hasStarted && isPhase1){
-//                    startStopButton.setText("Start");
-//                    hasStarted = false;
-//                    Chronometer chrono = (Chronometer) findViewById(R.id.chrono);
-//                    chrono.stop();
-//                    duration =chrono.getBase();
-//                    System.out.println("STOP");
-//
-//                }
-//
-//
-//                // Tweede fase, beweging registreren
-//                // Button staat op "START"
-//
-//                if(!hasStarted && !isPhase1){
-//                    motionStatus.setText("Fase 2: record gesture");
-//                    startStopButton.setText("STOP");
-//                    //zelf stoppen wanneer tijd om is
-//                    registerMotion(v.getContext(),duration);
-//
-//                }
+//                RingtonePlayingService listener = new RingtonePlayingService();
+////                if(listener == null)
+////                    Log.e("Listener: ","null");
+//                detector.registerGestureDetection(testModel, listener);
 //
 //
 //            }
-//
-
-
-        });
-
-        Button test = (Button) findViewById(R.id.testDetect);
-        test.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Log.e("Test Dectecion: ", "Try detect gesture");
-                detector = DeviceGestureLibrary.createGestureDetector(context);
-
-                RingtonePlayingService listener = new RingtonePlayingService();
-//                if(listener == null)
-//                    Log.e("Listener: ","null");
-                detector.registerGestureDetection(testModel, listener);
-
-
-            }
-        });
+//        });
 
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -245,7 +197,7 @@ public class SetMotionActivity extends AppCompatActivity {
         //DeviceGestureModel model = new DeviceGestureModel(id, frontAxis, sideAxis, vertAxis, interval, cooldown, deviation);
         //testModel = model;
 
-        addMotionToDatabase(id, frontAxisRecord, sideAxisRecord, vertAxisRecord, interval);
+        addMotionToDatabase(id, frontAxisRecord, sideAxisRecord, vertAxisRecord);
 
     }
 
@@ -281,12 +233,11 @@ public class SetMotionActivity extends AppCompatActivity {
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
-        detector.close();
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
         client.disconnect();
     }
 
-    public void addMotionToDatabase(int id, float[] fA, float[] sA, float[] vA, long interval){
+    public void addMotionToDatabase(int id, float[] fA, float[] sA, float[] vA){
         String stringFA = Arrays.toString(fA);
         String stringSA = Arrays.toString(sA);
         String stringVA = Arrays.toString(vA);
