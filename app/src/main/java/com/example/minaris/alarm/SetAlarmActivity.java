@@ -41,7 +41,6 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
     TimePicker alarm_timepicker;
     Context context;
     PendingIntent pending_intent;
-    AccelerometerListener acceloremeter_listener;
     int choose_whale_sound;
     Calendar calendar;
     Intent my_intent;
@@ -61,16 +60,11 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
 
         AlarmData data = (AlarmData) this.getIntent().getSerializableExtra("ad");
 
-        //Initialize sensor
-
-        acceloremeter_listener = AccelerometerListener.getInstance();
-        acceloremeter_listener.setContext(context);
-        acceloremeter_listener.setActivity(this);
-        //acceloremeter_listener.getManager().registerListener(acceloremeter_listener, acceloremeter_listener.getSensor(), SensorManager.SENSOR_DELAY_GAME);
-
 
         if(data != null) {
             Date hour = data.hour;
+            calendar = Calendar.getInstance();
+            //TODO: set to right time
             
         } else {
             // create an instance of a calendar
@@ -231,6 +225,7 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
 
     }
 
+    /*
     public void snooze(){
         // method that changes the update text Textbox
         //set_alarm_text("Alarm motion snooze!");
@@ -276,7 +271,9 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
 
         notify_manager.notify(0, notification_popup);
     }
+    */
 
+    /*
     public void cancel() {
 
         // method that changes the update text Textbox
@@ -301,7 +298,7 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
 
         // stop the ringtone
         sendBroadcast(my_intent);
-    }
+    }*/
 
     /*
     Method to add an alarm for a given time to the database
@@ -333,6 +330,8 @@ public class SetAlarmActivity extends AppCompatActivity implements AdapterView.O
 
         // Insert the new row, returning the primary key value of the new row
         long newRowId = db.insert(AlarmContract.AlarmEntry.TABLE_NAME, null, values);
+        String rId = Long.toString(newRowId);
+        Log.e("ROWID", rId);
 
         Intent intent = new Intent(this.context, MainActivity.class);
         startActivity(intent);

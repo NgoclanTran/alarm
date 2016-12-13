@@ -19,7 +19,6 @@ public class RingtonePlayingService extends Service implements IGestureDetectLis
     int startId;
     String alarmId;
     boolean isRunning;
-    AccelerometerListener accelerometerListener;
     //Set up the database helper
     private AlarmDbHelper mDbHelper;
     private SQLiteDatabase db;
@@ -40,12 +39,12 @@ public class RingtonePlayingService extends Service implements IGestureDetectLis
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        accelerometerListener = AccelerometerListener.getInstance();
 
         //Log.i("LocalService", "Received start id " + startId + ": " + intent);
 
         // fetch the extra string from the alarm on/alarm off values
         String extra = intent.getExtras().getString("extra");
+        Log.e("EXTRASTRING", extra);
         // fetch the whale choice integer values
         //Integer whale_sound_choice = intent.getExtras().getInt("whale_choice");
 
@@ -89,7 +88,6 @@ public class RingtonePlayingService extends Service implements IGestureDetectLis
             this.startId = 0;
 
             //Activate accelerometer listener
-            accelerometerListener.getManager().registerListener(accelerometerListener,accelerometerListener.sensor, SensorManager.SENSOR_DELAY_GAME);
 
 
             // set up the start command for the notification
@@ -110,9 +108,6 @@ public class RingtonePlayingService extends Service implements IGestureDetectLis
             this.startId = 0;
 
             //Deactivate accelerometer listener
-            accelerometerListener.getManager().unregisterListener(accelerometerListener);
-            accelerometerListener.snoozing = false;
-            accelerometerListener.canceling = false;
         }
 
         // these are if the user presses random buttons

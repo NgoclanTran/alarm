@@ -11,7 +11,6 @@ import android.widget.TextView;
 import android.widget.Switch;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,7 +28,7 @@ public class MotienAdapter extends BaseAdapter {
         this.context = context;
         mDbHelper = new AlarmDbHelper(context);
         db = mDbHelper.getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM " + AlarmContract.MotienEntry.TABLE_NAME,null);
+        Cursor c = db.rawQuery("SELECT * FROM " + AlarmContract.MotionEntry.TABLE_NAME,null);
         if (c.getCount() > 0){
             this.data = parseCursor(c);
         } else {

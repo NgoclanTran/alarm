@@ -5,7 +5,9 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,11 +19,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.util.Log;
 
+import java.util.Arrays;
+
 import info.augury.devicegesturelib.Axis;
 import info.augury.devicegesturelib.CompareMode;
 import info.augury.devicegesturelib.DeviceGestureLibrary;
 import info.augury.devicegesturelib.DeviceGestureModel;
 import info.augury.devicegesturelib.IGestureDetector;
+
 
 
 /**
@@ -53,6 +58,9 @@ public class SetMotionActivity extends AppCompatActivity {
      */
     private GoogleApiClient client;
 
+    AlarmDbHelper mDbHelper;
+    SQLiteDatabase db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +68,10 @@ public class SetMotionActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         this.context = this;
+
+        //Set up the database helper
+        mDbHelper = new AlarmDbHelper(getApplicationContext());
+        db = mDbHelper.getWritableDatabase();
 
 
         Spinner dropdown = (Spinner) findViewById(R.id.spinner);
@@ -222,10 +234,10 @@ public class SetMotionActivity extends AppCompatActivity {
         System.out.println("Vert axis: " + vertAxis.toString());
 
 
-        DeviceGestureModel model = new DeviceGestureModel(id, frontAxis, sideAxis, vertAxis, interval, cooldown, deviation);
-        testModel = model;
+        //DeviceGestureModel model = new DeviceGestureModel(id, frontAxis, sideAxis, vertAxis, interval, cooldown, deviation);
+        //testModel = model;
 
-        //TODO ADD TO DATABASE
+        addMotionToDatabase(id, frontAxisRecord, sideAxisRecord, vertAxisRecord, interval);
 
     }
 
@@ -264,6 +276,24 @@ public class SetMotionActivity extends AppCompatActivity {
         detector.close();
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
         client.disconnect();
+    }
+
+    public void addMotionToDatabase(int id, float[] fA, float[] sA, float[] vA, long interval){
+        String stringFA = Arrays.toString(fA);
+        String stringSA = Arrays.toString(sA);
+        String stringVA = Arrays.toString(vA);
+        String stringInterval = Long.toString(interval);
+
+        ContentValues values = new ContentValues();
+        values.put(AlarmContract.MotionEntry.MOTION_NAME, Integer.toString(id));
+        values.put(AlarmContract.MotionEntry.X, stringFA);
+        values.put(AlarmContract.MotionEntry.Y, stringSA);
+        values.put(AlarmContract.MotionEntry.Z, stringVA);
+        values.put(AlarmContract.MotionEntry.INTERVAL,stringInterval);
+
+        // Insert the new row, returning the primary key value of the new row
+        long newRowId = db.insert(AlarmContract.MotionEntry.TABLE_NAME, null, values);
+
     }
 }
 
