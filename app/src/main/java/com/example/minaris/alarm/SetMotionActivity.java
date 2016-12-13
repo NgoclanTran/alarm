@@ -44,6 +44,7 @@ public class SetMotionActivity extends AppCompatActivity {
     long interval = 0; // duration before next measurement (measured in nanoseconds)
     long duration = 0; // duration of gesutre  (measured in nanoseconds)
     DataReceiver receiver;
+    IGestureDetector detector;
 
     DeviceGestureModel testModel;
     /**
@@ -175,7 +176,7 @@ public class SetMotionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.e("Test Dectecion: ", "Try detect gesture");
-                IGestureDetector detector = DeviceGestureLibrary.createGestureDetector(context);
+                detector = DeviceGestureLibrary.createGestureDetector(context);
 
                 RingtonePlayingService listener = new RingtonePlayingService();
 //                if(listener == null)
@@ -260,6 +261,7 @@ public class SetMotionActivity extends AppCompatActivity {
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
+        detector.close();
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
         client.disconnect();
     }
