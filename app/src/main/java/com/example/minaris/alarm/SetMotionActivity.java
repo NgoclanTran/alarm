@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.util.Log;
@@ -48,7 +49,7 @@ public class SetMotionActivity extends AppCompatActivity {
     TextView motionStatus;
     long tStart;
     long tEnd;
-    long interval = 120 * 1000000; //Interval between measures in nanoseconds (5ms)
+    long interval = 4 * 100000; //Interval between measures in nanoseconds (5ms)
     long duration = 0; // duration of gesutre  (measured in nanoseconds)
     DataReceiver receiver;
 
@@ -124,7 +125,9 @@ public class SetMotionActivity extends AppCompatActivity {
                     //Action to record data
                     receiver = new DataReceiver();
                     Log.e("DataReceiver: ", "created");
-                    int count = 10;
+                    Log.e("Duration: ", String.valueOf(duration));
+                    int count = (int) (duration/interval);
+                    Log.e("Count: ", String.valueOf(count));
                     Log.e("Interval: ", String.valueOf(interval));
 
 
@@ -185,7 +188,8 @@ public class SetMotionActivity extends AppCompatActivity {
         float[] vertAxisRecord = receiver.getVert();
         Axis vertAxis = new Axis(vertAxisRecord, requiredProximity, mode);
 
-        int id = 100; // TODO gebruiker moet naam geven, nog niet in design
+        EditText idEditText = (EditText) findViewById(R.id.motionID);
+        int id = Integer.parseInt(idEditText.getText().toString());
         long cooldown = 1000 * 1000000; //Idleness interval after detection event in nanoseconds (1000ms)
         long deviation = 200 * 1000000; //Possible deviation of total duration in nanoseconds (200ms)
 
