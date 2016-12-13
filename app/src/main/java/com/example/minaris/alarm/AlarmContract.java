@@ -19,11 +19,13 @@ public class AlarmContract {
         public static final String REPEAT = "repeat";
     }
 
-    public static class MotienEntry implements BaseColumns {
+    public static class MotionEntry implements BaseColumns {
         public static final String TABLE_NAME = "Snooze";
-        public static final String x = "x";
-        public static final String y = "y";
-        public static final String z = "z";
+        public static final String X = "x";
+        public static final String Y = "y";
+        public static final String Z = "z";
+        public static final String MOTION_NAME = "motion_name";
+        public static final String INTERVAL = "interval";
         public static final String ACTIVE = "active";
 
     }
