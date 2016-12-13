@@ -242,6 +242,10 @@ public class SetMotionActivity extends AppCompatActivity {
     }
 
     public void addMotionToDatabase(int id, float[] fA, float[] sA, float[] vA){
+
+        //TODO: Delete this line for final version
+        db.execSQL("delete from " + AlarmContract.MotionEntry.TABLE_NAME);
+        
         String stringFA = Arrays.toString(fA);
         String stringSA = Arrays.toString(sA);
         String stringVA = Arrays.toString(vA);
