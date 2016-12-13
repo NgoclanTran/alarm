@@ -43,6 +43,7 @@ public class SetMotionActivity extends AppCompatActivity {
     boolean hasStarted;
     boolean isPhase1;
     Button startButton;
+    TextView taskText;
     TextView motionStatus;
     long tStart;
     long tEnd;
@@ -83,7 +84,11 @@ public class SetMotionActivity extends AppCompatActivity {
         isPhase1 = true;
         startButton = (Button) findViewById(R.id.startStopButton);
         motionStatus = (TextView) findViewById(R.id.motionStatus);
-        motionStatus.setText("Phase 1: measure duration of motion");
+        motionStatus.setText("Phase 1");
+
+        taskText = (TextView) findViewById(R.id.taskText);
+        taskText.setText("record time of gesture");
+
 
 
         startButton.setOnClickListener(new View.OnClickListener() {
@@ -93,7 +98,7 @@ public class SetMotionActivity extends AppCompatActivity {
                 Log.e("Status: ", "Fase 1 gestart");
                 if (isPhase1 & !hasStarted) {
                     hasStarted = true;
-                    tStart = System.currentTimeMillis();
+                    tStart = System.nanoTime();
                     startButton.setText("STOP");
 
 
@@ -101,11 +106,13 @@ public class SetMotionActivity extends AppCompatActivity {
                     Log.e("Status: ", "fase 1 gestopt");
                     isPhase1 = false;
                     hasStarted = false;
-                    tEnd = System.currentTimeMillis();
-                    motionStatus.setText("Phase 2 : record gesture");
+                    tEnd = System.nanoTime();
+                    motionStatus.setText("Phase 2");
+                    taskText.setText("record gesture, click start");
                     startButton.setText("START");
 
                 } else if (!isPhase1 & !hasStarted) {
+                    taskText.setText("Do gesture again");
                     Log.e("Status: ", "fase 2 gestart");
                     startButton.setText("STOP");
                     hasStarted = true;
@@ -127,8 +134,9 @@ public class SetMotionActivity extends AppCompatActivity {
 
 
                 } else {
+                    taskText.setText("Finished");
                     Log.e("Status: ", "fase 2 gestopt");
-                    long duration = (tEnd - tStart) / 100;
+                    long duration = tEnd - tStart;
                     registerMotion(v.getContext(), duration);
                 }
 
