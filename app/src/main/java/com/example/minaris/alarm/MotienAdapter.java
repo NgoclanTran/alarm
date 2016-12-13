@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Switch;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -56,7 +57,7 @@ public class MotienAdapter extends BaseAdapter {
         name.setText(getItem(i).getName());
 
         Switch sw = (Switch) vi.findViewById(R.id.alarmSwitch);
-        sw.setChecked(getItem(i).toggled);
+        sw.setChecked(true);
 
         return vi;
     }
@@ -77,11 +78,39 @@ public class MotienAdapter extends BaseAdapter {
     }
 
     List<MotienData> parseCursor(Cursor c) {
-        ArrayList<MotienData> motienList = new ArrayList<MotienData>();
+        ArrayList<MotienData> motionList = new ArrayList<MotienData>();
         c.moveToFirst();
         do {
-
+            long itemId = c.getLong(c.getColumnIndexOrThrow(AlarmContract.AlarmEntry._ID));
+            //String toggled = c.getString(c.getColumnIndexOrThrow(AlarmContract.MotionEntry.ACTIVE));
+            String interval = c.getString(c.getColumnIndexOrThrow(AlarmContract.MotionEntry.INTERVAL));
+            String motionName = c.getString(c.getColumnIndexOrThrow(AlarmContract.MotionEntry.MOTION_NAME));
+            String x = c.getString(c.getColumnIndexOrThrow(AlarmContract.MotionEntry.X));
+            String y = c.getString(c.getColumnIndexOrThrow(AlarmContract.MotionEntry.Y));
+            String z = c.getString(c.getColumnIndexOrThrow(AlarmContract.MotionEntry.Z));
+            MotienData data = new MotienData();
+//            if (toggled.equals("true")){
+//                data.toggled = true;
+//            } else {
+//                data.toggled = false;
+//            }
+            data.interval = Long.parseLong(interval);
+            data.name = motionName;
+            data.x = parseAxis(x);
+            data.y = parseAxis(y);
+            data.z = parseAxis(z);
+            motionList.add(data);
         } while (c.moveToNext());
-        return motienList;
+        return motionList;
+    }
+
+    public Float[] parseAxis(String axis) {
+        Float [] res;
+        String [] axisString = axis.substring(1,axis.length()-1).split(",");
+        res = new Float[axisString.length];
+        for (int i = 0; i < axisString.length; i++) {
+            res[i] = Float.parseFloat(axisString[i]);
+        }
+        return res;
     }
 }

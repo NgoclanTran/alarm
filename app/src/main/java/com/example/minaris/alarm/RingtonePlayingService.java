@@ -10,7 +10,15 @@ import android.os.IBinder;
 import android.util.Log;
 import android.hardware.SensorManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import info.augury.devicegesturelib.Axis;
+import info.augury.devicegesturelib.CompareMode;
+import info.augury.devicegesturelib.DeviceGestureLibrary;
+import info.augury.devicegesturelib.DeviceGestureModel;
 import info.augury.devicegesturelib.IGestureDetectListener;
+import info.augury.devicegesturelib.IGestureDetector;
 
 
 public class RingtonePlayingService extends Service implements IGestureDetectListener{
@@ -22,11 +30,20 @@ public class RingtonePlayingService extends Service implements IGestureDetectLis
     //Set up the database helper
     private AlarmDbHelper mDbHelper;
     private SQLiteDatabase db;
+    IGestureDetector detector;
+
+
+    float requiredProximity = 0.75f; //Threshold of detection
+    CompareMode mode = CompareMode.Flattened; //Mode of axis data comparison
+    long cooldown = 1000 * 1000000; //Idleness interval after detection event in nanoseconds (1000ms)
+    long deviation = 200 * 1000000; //Possible deviation of total duration in nanoseconds (200ms)
+
 
     @Override
     public void onCreate(){
         mDbHelper = new AlarmDbHelper(getApplicationContext());
         db = mDbHelper.getWritableDatabase();
+        detector = DeviceGestureLibrary.createGestureDetector(getApplicationContext());
     }
 
 
@@ -87,7 +104,8 @@ public class RingtonePlayingService extends Service implements IGestureDetectLis
             this.isRunning = true;
             this.startId = 0;
 
-            //Activate accelerometer listener
+            //Activate Gesture Listener
+            startGestureListener();
 
 
             // set up the start command for the notification
@@ -176,5 +194,52 @@ public class RingtonePlayingService extends Service implements IGestureDetectLis
         // This method is called when a gesture is detected
         // Turn alarm off when this method is called
         Log.i("Motion Detected: ",String.valueOf(gestureID));
+    }
+
+    public void startGestureListener() {
+        Cursor c = db.rawQuery("SELECT * FROM " + AlarmContract.MotionEntry.TABLE_NAME, null);
+        List<DeviceGestureModel> list = parseCursor(c);
+        for (DeviceGestureModel m : list) {
+            detector.registerGestureDetection(m, this);
+        }
+    }
+
+    List<DeviceGestureModel> parseCursor(Cursor c) {
+        ArrayList<DeviceGestureModel> modelList = new ArrayList<DeviceGestureModel>();
+        c.moveToFirst();
+        do {
+            long itemId = c.getLong(c.getColumnIndexOrThrow(AlarmContract.AlarmEntry._ID));
+            //String toggled = c.getString(c.getColumnIndexOrThrow(AlarmContract.MotionEntry.ACTIVE));
+            String interval = c.getString(c.getColumnIndexOrThrow(AlarmContract.MotionEntry.INTERVAL));
+            String motionName = c.getString(c.getColumnIndexOrThrow(AlarmContract.MotionEntry.MOTION_NAME));
+            String x = c.getString(c.getColumnIndexOrThrow(AlarmContract.MotionEntry.X));
+            String y = c.getString(c.getColumnIndexOrThrow(AlarmContract.MotionEntry.Y));
+            String z = c.getString(c.getColumnIndexOrThrow(AlarmContract.MotionEntry.Z));
+
+            long t = Long.parseLong(interval);
+            int name = Integer.parseInt(motionName);
+            float[] xaxis = parseAxis(x);
+            float[] yaxis = parseAxis(y);
+            float[] zaxis = parseAxis(z);
+
+            Axis frontAxis = new Axis(xaxis, requiredProximity, mode);
+            Axis sideAxis = new Axis(yaxis, requiredProximity, mode);
+            Axis vertAxis = new Axis(zaxis, requiredProximity, mode);
+
+            DeviceGestureModel model = new DeviceGestureModel(name, frontAxis, sideAxis, vertAxis, t, cooldown, deviation);
+
+            modelList.add(model);
+        } while (c.moveToNext());
+        return modelList;
+    }
+
+    public float[] parseAxis(String axis) {
+        float [] res;
+        String [] axisString = axis.substring(1,-1).split(",");
+        res = new float[axisString.length];
+        for (int i = 0; i < axisString.length; i++) {
+            res[i] = Float.parseFloat(axisString[i]);
+        }
+        return res;
     }
 }

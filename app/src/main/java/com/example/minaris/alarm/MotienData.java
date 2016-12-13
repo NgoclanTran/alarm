@@ -9,8 +9,12 @@ import java.io.Serializable;
 public class MotienData implements Serializable{
 
     public String name;
-
+    public long interval;
     public Boolean toggled;
+
+    public Float[] x;
+    public Float[] y;
+    public Float[] z;
 
     public String getName() {
         return name;
