@@ -10,6 +10,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import android.util.Log;
 
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 import info.augury.devicegesturelib.Axis;
 import info.augury.devicegesturelib.CompareMode;
@@ -69,6 +71,7 @@ public class SetMotionActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         this.context = this;
+        long duration;
 
         //Set up the database helper
         mDbHelper = new AlarmDbHelper(getApplicationContext());
@@ -90,10 +93,26 @@ public class SetMotionActivity extends AppCompatActivity {
         taskText.setText("record time of gesture");
 
 
-
         startButton.setOnClickListener(new View.OnClickListener() {
 
-            @Override
+               @Override
+               public void onClick(View v) {
+                   Log.e("Status: ", "Fase 1 gestart");
+                   tStart = System.nanoTime();
+                   startButton.setText("STOP");
+                   startButton.setOnClickListener(new View.OnClickListener() {
+
+                       @Override
+                       public void onClick(View view) {
+                           endPhaseOne();
+                       }
+
+                   });
+               }
+        });
+
+
+           /* @Override
             public void onClick(View v) {
                 Log.e("Status: ", "Fase 1 gestart");
                 if (isPhase1 & !hasStarted) {
@@ -110,8 +129,14 @@ public class SetMotionActivity extends AppCompatActivity {
                     motionStatus.setText("Phase 2");
                     taskText.setText("record gesture, click start");
                     startButton.setText("START");
+                    startButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
 
-                } else if (!isPhase1 & !hasStarted) {
+                        }
+                    });
+
+               /* } else if (!isPhase1 & !hasStarted) {
                     taskText.setText("Do gesture again");
                     Log.e("Status: ", "fase 2 gestart");
                     startButton.setText("STOP");
@@ -139,11 +164,9 @@ public class SetMotionActivity extends AppCompatActivity {
                     Log.e("Status: ", "fase 2 gestopt");
                     long duration = tEnd - tStart;
                     registerMotion(v.getContext(), duration);
-                }
-
-
-            }
-        });
+                } */
+//            }
+//        });
 
 //        Button test = (Button) findViewById(R.id.testDetect);
 //        test.setOnClickListener(new View.OnClickListener() {
@@ -168,34 +191,102 @@ public class SetMotionActivity extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    private void registerMotion(Context context, long duration) {
+    private void endPhaseOne() {
+        Log.e("Status: ", "fase 1 gestopt");
+        tEnd = System.nanoTime();
+        motionStatus.setText("Phase 2");
+        taskText.setText("record gesture, click start");
+        startButton.setText("Start");
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startPhaseTwo();
+            }
+        });
+    }
+
+    private void startPhaseTwo() {
+        taskText.setText("Do gesture again");
+        Log.e("Status: ", "fase 2 gestart");
+        startButton.setPressed(true);
+        startButton.setOnClickListener(null);
+        duration = tEnd - tStart;
+        Log.e("duration", String.valueOf(duration));
+        startRecording();
+    }
+
+    private void startRecording() {
+        receiver = new DataReceiver();
+        final int count = (int) (duration/interval);
+        DeviceGestureLibrary.recordGesture(context, interval, count, receiver);
+
+//        Handler motionHandler = new Handler();
+//        motionHandler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                Log.e("Recoring", "in start recording");
+//
+//
+//            }
+//        });
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                makeReadyRegisterMotion();
+            }
+        }, TimeUnit.MILLISECONDS.convert(duration, TimeUnit.NANOSECONDS) + 1000);
+
+    }
+
+    private void makeReadyRegisterMotion () {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                startButton.setPressed(false);
+                startButton.setText("Save");
+                startButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        registerMotion();
+                        finish();
+                    }
+                });
+            }
+        });
+    }
+
+    private void registerMotion() {
         //
 
         // Create axis for gesture model
         float[] frontAxisRecord = receiver.getFront();
-        if (frontAxisRecord == null)
-            System.out.println("Axis null");
-
-        System.out.println("Front axis: " + frontAxisRecord.length);
+//        if (frontAxisRecord == null)
+//            System.out.println("Axis null");
+//
+//        System.out.println("Front axis: " + frontAxisRecord.length);
 
         float requiredProximity = 0.5f; // threshold for detection
         CompareMode mode = CompareMode.Flattened; // Mode of axis data comparison
-        Axis frontAxis = new Axis(frontAxisRecord, requiredProximity, mode);
+  //      Axis frontAxis = new Axis(frontAxisRecord, requiredProximity, mode);
 
         float[] sideAxisRecord = receiver.getSide();
-        Axis sideAxis = new Axis(sideAxisRecord, requiredProximity, mode);
+ //       Axis sideAxis = new Axis(sideAxisRecord, requiredProximity, mode);
 
         float[] vertAxisRecord = receiver.getVert();
-        Axis vertAxis = new Axis(vertAxisRecord, requiredProximity, mode);
+ //       Axis vertAxis = new Axis(vertAxisRecord, requiredProximity, mode);
 
         EditText idEditText = (EditText) findViewById(R.id.motionID);
         int id = Integer.parseInt(idEditText.getText().toString());
         long cooldown = 1000 * 1000000; //Idleness interval after detection event in nanoseconds (1000ms)
         long deviation = 200 * 1000000; //Possible deviation of total duration in nanoseconds (200ms)
 
-        System.out.println("Front axis: " + frontAxis.toString());
-        System.out.println("Side axis: " + sideAxis.toString());
-        System.out.println("Vert axis: " + vertAxis.toString());
+   //     System.out.println("Front axis: " + frontAxis.toString());
+   //     System.out.println("Side axis: " + sideAxis.toString());
+   //     System.out.println("Vert axis: " + vertAxis.toString());
+
+        Log.e("registerMotion", String.valueOf(frontAxisRecord.length));
 
 
         //DeviceGestureModel model = new DeviceGestureModel(id, frontAxis, sideAxis, vertAxis, interval, cooldown, deviation);
