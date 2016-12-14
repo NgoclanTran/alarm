@@ -244,6 +244,7 @@ public class SetMotionActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                taskText.setText("Save motion?");
                 startButton.setPressed(false);
                 startButton.setText("Save");
                 startButton.setOnClickListener(new View.OnClickListener() {
