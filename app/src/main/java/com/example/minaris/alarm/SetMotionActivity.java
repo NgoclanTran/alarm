@@ -223,7 +223,7 @@ public class SetMotionActivity extends AppCompatActivity {
     }
 
     private void startRecording() {
-        receiver = new DataReceiver();
+        receiver = new DataReceiver(this);
         final int count = (int) (duration/interval);
         Log.e("duration: ",String.valueOf(duration));
         Log.e("interval: ", String.valueOf(interval));
@@ -240,19 +240,19 @@ public class SetMotionActivity extends AppCompatActivity {
 //            }
 //        });
 
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                makeReadyRegisterMotion();
-            }
-        }, TimeUnit.MILLISECONDS.convert(duration, TimeUnit.NANOSECONDS) + 1000);
+//        Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                makeReadyRegisterMotion();
+//            }
+//        }, TimeUnit.MILLISECONDS.convert(duration, TimeUnit.NANOSECONDS) + 1000);
 
         
 
     }
 
-    private void makeReadyRegisterMotion () {
+    public void makeReadyRegisterMotion () {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

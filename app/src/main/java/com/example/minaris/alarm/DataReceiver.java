@@ -15,8 +15,14 @@ public class DataReceiver implements IGestureRecordReceiver {
     private float[] front;
     private float[] vert;
 
+    private SetMotionActivity toNotify;
+
     public DataReceiver(){
         Log.e("DataReciever: ", "new reciever");
+    }
+
+    public DataReceiver(SetMotionActivity act) {
+        this.toNotify = act;
     }
 
     @Override
@@ -25,6 +31,8 @@ public class DataReceiver implements IGestureRecordReceiver {
         this.side = side;
         this.front = front;
         this.vert = vert;
+
+        toNotify.makeReadyRegisterMotion();
         //System.out.println(side.length);
     }
 
