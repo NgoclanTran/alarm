@@ -238,6 +238,8 @@ public class SetMotionActivity extends AppCompatActivity {
             }
         }, TimeUnit.MILLISECONDS.convert(duration, TimeUnit.NANOSECONDS) + 1000);
 
+        
+
     }
 
     private void makeReadyRegisterMotion () {
