@@ -51,9 +51,11 @@ public class SetMotionActivity extends AppCompatActivity {
     TextView motionStatus;
     long tStart;
     long tEnd;
-    long interval = 4 * 100000; //Interval between measures in nanoseconds (5ms)
+   //long interval = Long.valueOf(Long.toHexString(5*1000000),16).longValue();
+    long interval = 50; //Interval between measures (5ms)
     long duration = 0; // duration of gesutre  (measured in nanoseconds)
     DataReceiver receiver;
+
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -210,14 +212,22 @@ public class SetMotionActivity extends AppCompatActivity {
         Log.e("Status: ", "fase 2 gestart");
         startButton.setPressed(true);
         startButton.setOnClickListener(null);
-        duration = tEnd - tStart;
+        duration = (tEnd - tStart)/1000000;
+        //Log.e("duration in hex: ",Long.toHexString(duration));
         Log.e("duration", String.valueOf(duration));
+        //duration = Long.valueOf(Long.toHexString(duration),16).longValue();
+        //Log.e("duration long hex: ",String.valueOf(duration));
+       // duration = 120*1000000;
+        //Log.e("duration", String.valueOf(duration));
         startRecording();
     }
 
     private void startRecording() {
         receiver = new DataReceiver();
         final int count = (int) (duration/interval);
+        Log.e("duration: ",String.valueOf(duration));
+        Log.e("interval: ", String.valueOf(interval));
+        Log.e("count: ",String.valueOf(count));
         DeviceGestureLibrary.recordGesture(context, interval, count, receiver);
 
 //        Handler motionHandler = new Handler();
