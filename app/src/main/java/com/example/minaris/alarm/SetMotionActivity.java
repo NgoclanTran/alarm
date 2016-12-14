@@ -263,36 +263,11 @@ public class SetMotionActivity extends AppCompatActivity {
 
         // Create axis for gesture model
         float[] frontAxisRecord = receiver.getFront();
-//        if (frontAxisRecord == null)
-//            System.out.println("Axis null");
-//
-//        System.out.println("Front axis: " + frontAxisRecord.length);
-
-        float requiredProximity = 0.5f; // threshold for detection
-        CompareMode mode = CompareMode.Flattened; // Mode of axis data comparison
-  //      Axis frontAxis = new Axis(frontAxisRecord, requiredProximity, mode);
-
         float[] sideAxisRecord = receiver.getSide();
- //       Axis sideAxis = new Axis(sideAxisRecord, requiredProximity, mode);
-
         float[] vertAxisRecord = receiver.getVert();
- //       Axis vertAxis = new Axis(vertAxisRecord, requiredProximity, mode);
-
         EditText idEditText = (EditText) findViewById(R.id.motionID);
         int id = Integer.parseInt(idEditText.getText().toString());
-        long cooldown = 1000 * 1000000; //Idleness interval after detection event in nanoseconds (1000ms)
-        long deviation = 200 * 1000000; //Possible deviation of total duration in nanoseconds (200ms)
-
-   //     System.out.println("Front axis: " + frontAxis.toString());
-   //     System.out.println("Side axis: " + sideAxis.toString());
-   //     System.out.println("Vert axis: " + vertAxis.toString());
-
-        Log.e("registerMotion", String.valueOf(frontAxisRecord.length));
-
-
-        //DeviceGestureModel model = new DeviceGestureModel(id, frontAxis, sideAxis, vertAxis, interval, cooldown, deviation);
-        //testModel = model;
-
+        Log.e("registerMotion", String.valueOf(frontAxisRecord));
         addMotionToDatabase(id, frontAxisRecord, sideAxisRecord, vertAxisRecord);
 
     }
@@ -337,6 +312,7 @@ public class SetMotionActivity extends AppCompatActivity {
 
         //TODO: Delete this line for final version
         db.execSQL("delete from " + AlarmContract.MotionEntry.TABLE_NAME);
+        Log.e("AddtoDatabase",fA.toString());
         
         String stringFA = Arrays.toString(fA);
         String stringSA = Arrays.toString(sA);
