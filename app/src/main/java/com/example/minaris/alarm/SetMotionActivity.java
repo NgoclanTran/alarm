@@ -51,9 +51,11 @@ public class SetMotionActivity extends AppCompatActivity {
     TextView motionStatus;
     long tStart;
     long tEnd;
-    long interval = 4 * 100000; //Interval between measures in nanoseconds (5ms)
+   //long interval = Long.valueOf(Long.toHexString(5*1000000),16).longValue();
+    long interval = 50; //Interval between measures (5ms)
     long duration = 0; // duration of gesutre  (measured in nanoseconds)
     DataReceiver receiver;
+
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -210,14 +212,22 @@ public class SetMotionActivity extends AppCompatActivity {
         Log.e("Status: ", "fase 2 gestart");
         startButton.setPressed(true);
         startButton.setOnClickListener(null);
-        duration = tEnd - tStart;
+        duration = (tEnd - tStart)/1000000;
+        //Log.e("duration in hex: ",Long.toHexString(duration));
         Log.e("duration", String.valueOf(duration));
+        //duration = Long.valueOf(Long.toHexString(duration),16).longValue();
+        //Log.e("duration long hex: ",String.valueOf(duration));
+       // duration = 120*1000000;
+        //Log.e("duration", String.valueOf(duration));
         startRecording();
     }
 
     private void startRecording() {
         receiver = new DataReceiver();
         final int count = (int) (duration/interval);
+        Log.e("duration: ",String.valueOf(duration));
+        Log.e("interval: ", String.valueOf(interval));
+        Log.e("count: ",String.valueOf(count));
         DeviceGestureLibrary.recordGesture(context, interval, count, receiver);
 
 //        Handler motionHandler = new Handler();
@@ -265,36 +275,11 @@ public class SetMotionActivity extends AppCompatActivity {
 
         // Create axis for gesture model
         float[] frontAxisRecord = receiver.getFront();
-//        if (frontAxisRecord == null)
-//            System.out.println("Axis null");
-//
-//        System.out.println("Front axis: " + frontAxisRecord.length);
-
-        float requiredProximity = 0.5f; // threshold for detection
-        CompareMode mode = CompareMode.Flattened; // Mode of axis data comparison
-  //      Axis frontAxis = new Axis(frontAxisRecord, requiredProximity, mode);
-
         float[] sideAxisRecord = receiver.getSide();
- //       Axis sideAxis = new Axis(sideAxisRecord, requiredProximity, mode);
-
         float[] vertAxisRecord = receiver.getVert();
- //       Axis vertAxis = new Axis(vertAxisRecord, requiredProximity, mode);
-
         EditText idEditText = (EditText) findViewById(R.id.motionID);
         int id = Integer.parseInt(idEditText.getText().toString());
-        long cooldown = 1000 * 1000000; //Idleness interval after detection event in nanoseconds (1000ms)
-        long deviation = 200 * 1000000; //Possible deviation of total duration in nanoseconds (200ms)
-
-   //     System.out.println("Front axis: " + frontAxis.toString());
-   //     System.out.println("Side axis: " + sideAxis.toString());
-   //     System.out.println("Vert axis: " + vertAxis.toString());
-
-        Log.e("registerMotion", String.valueOf(frontAxisRecord.length));
-
-
-        //DeviceGestureModel model = new DeviceGestureModel(id, frontAxis, sideAxis, vertAxis, interval, cooldown, deviation);
-        //testModel = model;
-
+        Log.e("registerMotion", String.valueOf(frontAxisRecord));
         addMotionToDatabase(id, frontAxisRecord, sideAxisRecord, vertAxisRecord);
 
     }
@@ -339,6 +324,7 @@ public class SetMotionActivity extends AppCompatActivity {
 
         //TODO: Delete this line for final version
         db.execSQL("delete from " + AlarmContract.MotionEntry.TABLE_NAME);
+        Log.e("AddtoDatabase",fA.toString());
         
         String stringFA = Arrays.toString(fA);
         String stringSA = Arrays.toString(sA);

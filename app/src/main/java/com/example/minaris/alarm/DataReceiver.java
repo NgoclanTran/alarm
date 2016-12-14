@@ -16,7 +16,7 @@ public class DataReceiver implements IGestureRecordReceiver {
     private float[] vert;
 
     public DataReceiver(){
-
+        Log.e("DataReciever: ", "new reciever");
     }
 
     @Override
