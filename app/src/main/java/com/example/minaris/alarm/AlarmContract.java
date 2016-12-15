@@ -27,6 +27,7 @@ public class AlarmContract {
         public static final String MOTION_NAME = "motion_name";
         public static final String INTERVAL = "interval";
         public static final String ACTIVE = "active";
+        public static final String TYPE = "type";
 
     }
 

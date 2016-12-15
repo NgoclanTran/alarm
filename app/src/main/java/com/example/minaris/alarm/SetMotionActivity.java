@@ -41,7 +41,7 @@ public class SetMotionActivity extends AppCompatActivity {
     float[] side;
     float[] vert;
 
-
+    MotionSpinnerActivity motionSpinnerActivity;
     Context context;
     boolean hasStarted;
     boolean isPhase1;
@@ -80,10 +80,23 @@ public class SetMotionActivity extends AppCompatActivity {
         db = mDbHelper.getWritableDatabase();
 
 
-        Spinner dropdown = (Spinner) findViewById(R.id.spinner);
-        String[] items = new String[]{"Short duration (120 ms)", "Long duration (200 ms)"};
+
+        String[] items = new String[]{"10 min snooze", "5 min snooze","Turn off"};
+
+
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
-        dropdown.setAdapter(adapter);
+        spinner.setAdapter(adapter);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+        // Create new ringtoneSpinnerActivity
+        motionSpinnerActivity = new MotionSpinnerActivity();
+        // Set the newly created activity to the spinner
+        spinner.setOnItemSelectedListener(motionSpinnerActivity);
+
 
         hasStarted = false;
         isPhase1 = true;
@@ -330,6 +343,7 @@ public class SetMotionActivity extends AppCompatActivity {
         String stringSA = Arrays.toString(sA);
         String stringVA = Arrays.toString(vA);
         String stringInterval = Long.toString(interval);
+        String type = motionSpinnerActivity.getSelectedType();
 
         ContentValues values = new ContentValues();
         values.put(AlarmContract.MotionEntry.MOTION_NAME, Integer.toString(id));
@@ -337,6 +351,7 @@ public class SetMotionActivity extends AppCompatActivity {
         values.put(AlarmContract.MotionEntry.Y, stringSA);
         values.put(AlarmContract.MotionEntry.Z, stringVA);
         values.put(AlarmContract.MotionEntry.INTERVAL,stringInterval);
+        values.put(AlarmContract.MotionEntry.TYPE,type);
 
         // Insert the new row, returning the primary key value of the new row
         long newRowId = db.insert(AlarmContract.MotionEntry.TABLE_NAME, null, values);
