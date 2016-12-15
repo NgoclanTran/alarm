@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by jodeneve on 08/12/2016.
  */
 
-public class MotienData implements Serializable{
+public class MotionData implements Serializable{
 
     public String name;
     public long interval;

@@ -2,10 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.minaris.alarm.AlarmFragment">
+    tools:context="com.example.minaris.alarm.MotionFragment">
 
     <ListView
-        android:id="@+id/listviewAlarm"
+        android:id="@+id/listviewMotion"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:focusable="true" >

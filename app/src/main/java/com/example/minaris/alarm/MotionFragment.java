@@ -19,7 +19,7 @@ public class  MotionFragment extends Fragment{
 
 
     //ArrayList<String> listItems;
-    MotienAdapter adapter;
+    MotionAdapter adapter;
 
 
     private boolean hasStarted;
@@ -37,17 +37,17 @@ public class  MotionFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_alarm, viewGroup, false);
-        final ListView lv = (ListView) view.findViewById(R.id.listviewAlarm);
+        View view = inflater.inflate(R.layout.fragment_motion, viewGroup, false);
+        final ListView lv = (ListView) view.findViewById(R.id.listviewMotion);
 
-        adapter = new MotienAdapter(getContext());
+        adapter = new MotionAdapter(getContext());
         lv.setAdapter(adapter);
         lv.setOnItemClickListener(new ListView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 System.out.println("in item on click");
-                MotienData md = adapter.getItem(i);
+                MotionData md = adapter.getItem(i);
                 Intent intent = new Intent(getContext(), SetMotionActivity.class);
                 intent.putExtra("theMotien", md);
                 startActivity(intent);
