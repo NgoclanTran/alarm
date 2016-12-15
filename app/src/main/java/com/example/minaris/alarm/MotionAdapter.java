@@ -11,21 +11,20 @@ import android.widget.TextView;
 import android.widget.Switch;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
  * Created by jodeneve on 08/12/2016.
  */
 
-public class MotienAdapter extends BaseAdapter {
+public class MotionAdapter extends BaseAdapter {
 
     Context context;
-    List<MotienData> data;
+    List<MotionData> data;
     SQLiteDatabase db;
     AlarmDbHelper mDbHelper;
 
-    public MotienAdapter(Context context) {
+    public MotionAdapter(Context context) {
         this.context = context;
         mDbHelper = new AlarmDbHelper(context);
         db = mDbHelper.getReadableDatabase();
@@ -33,7 +32,7 @@ public class MotienAdapter extends BaseAdapter {
         if (c.getCount() > 0){
             this.data = parseCursor(c);
         } else {
-            this.data = new ArrayList<MotienData>();
+            this.data = new ArrayList<MotionData>();
         }
 
     }
@@ -50,13 +49,13 @@ public class MotienAdapter extends BaseAdapter {
         if(vi == null) {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            vi = inflater.inflate(R.layout.alarm_row, null);
+            vi = inflater.inflate(R.layout.motien_row, null);
         }
 
-        TextView name = (TextView) vi.findViewById(R.id.date);
+        TextView name = (TextView) vi.findViewById(R.id.motien);
         name.setText(getItem(i).getName());
 
-        Switch sw = (Switch) vi.findViewById(R.id.alarmSwitch);
+        Switch sw = (Switch) vi.findViewById(R.id.motionSwitch);
         sw.setChecked(true);
 
         return vi;
@@ -68,7 +67,7 @@ public class MotienAdapter extends BaseAdapter {
     }
 
     @Override
-    public MotienData getItem(int i) {
+    public MotionData getItem(int i) {
         return data.get(i);
     }
 
@@ -77,8 +76,8 @@ public class MotienAdapter extends BaseAdapter {
         return super.isEnabled(position);
     }
 
-    List<MotienData> parseCursor(Cursor c) {
-        ArrayList<MotienData> motionList = new ArrayList<MotienData>();
+    List<MotionData> parseCursor(Cursor c) {
+        ArrayList<MotionData> motionList = new ArrayList<MotionData>();
         c.moveToFirst();
         do {
             long itemId = c.getLong(c.getColumnIndexOrThrow(AlarmContract.AlarmEntry._ID));
@@ -88,7 +87,7 @@ public class MotienAdapter extends BaseAdapter {
             String x = c.getString(c.getColumnIndexOrThrow(AlarmContract.MotionEntry.X));
             String y = c.getString(c.getColumnIndexOrThrow(AlarmContract.MotionEntry.Y));
             String z = c.getString(c.getColumnIndexOrThrow(AlarmContract.MotionEntry.Z));
-            MotienData data = new MotienData();
+            MotionData data = new MotionData();
 //            if (toggled.equals("true")){
 //                data.toggled = true;
 //            } else {

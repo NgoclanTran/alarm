@@ -14,7 +14,7 @@
         android:layout_marginTop="5dp"/>
 
     <Switch
-        android:id="@+id/alarmSwitch"
+        android:id="@+id/motionSwitch"
         android:layout_width="wrap_content"
         android:layout_gravity="right|center"
         android:layout_height="wrap_content"

@@ -105,6 +105,7 @@ public class RingtonePlayingService extends Service implements IGestureDetectLis
             this.startId = 0;
 
             //Activate Gesture Listener
+            Log.e("RingtonePS: ", "Start gesture listener");
             startGestureListener();
 
 
@@ -207,12 +208,14 @@ public class RingtonePlayingService extends Service implements IGestureDetectLis
     public void startGestureListener() {
         Cursor c = db.rawQuery("SELECT * FROM " + AlarmContract.MotionEntry.TABLE_NAME, null);
         List<DeviceGestureModel> list = parseCursor(c);
+        Log.e("RingtonePS: ", "List of gest = " + String.valueOf(list.size()));
         for (DeviceGestureModel m : list) {
             detector.registerGestureDetection(m, this);
         }
     }
 
     List<DeviceGestureModel> parseCursor(Cursor c) {
+        Log.e("RingtonePS: ", "parseCursor");
         ArrayList<DeviceGestureModel> modelList = new ArrayList<DeviceGestureModel>();
         c.moveToFirst();
         do {
