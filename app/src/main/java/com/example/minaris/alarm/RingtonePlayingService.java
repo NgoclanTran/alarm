@@ -1,5 +1,7 @@
 package com.example.minaris.alarm;
 import android.annotation.TargetApi;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.database.Cursor;
@@ -11,6 +13,7 @@ import android.util.Log;
 import android.hardware.SensorManager;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import info.augury.devicegesturelib.Axis;
@@ -19,6 +22,7 @@ import info.augury.devicegesturelib.DeviceGestureLibrary;
 import info.augury.devicegesturelib.DeviceGestureModel;
 import info.augury.devicegesturelib.IGestureDetectListener;
 import info.augury.devicegesturelib.IGestureDetector;
+import info.augury.devicegesturelib.GestureDetector;
 
 
 public class RingtonePlayingService extends Service implements IGestureDetectListener{
@@ -33,7 +37,7 @@ public class RingtonePlayingService extends Service implements IGestureDetectLis
     IGestureDetector detector;
 
 
-    float requiredProximity = 0.5f; //Threshold of detection
+    float requiredProximity = 0.6f; //Threshold of detection
     CompareMode mode = CompareMode.Flattened; //Mode of axis data comparison
     long cooldown = 1000 * 1000000; //Idleness interval after detection event in nanoseconds (1000ms)
     long deviation = 200 * 1000000; //Possible deviation of total duration in nanoseconds (200ms)
@@ -56,6 +60,7 @@ public class RingtonePlayingService extends Service implements IGestureDetectLis
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        detector = DeviceGestureLibrary.createGestureDetector(getApplicationContext());
 
         //Log.i("LocalService", "Received start id " + startId + ": " + intent);
 
@@ -190,7 +195,6 @@ public class RingtonePlayingService extends Service implements IGestureDetectLis
 
     }
 
-
     public void onGestureDetected(int gestureID, long timestamp) {
         // This method is called when a gesture is detected
         // Turn alarm off when this method is called
@@ -202,14 +206,33 @@ public class RingtonePlayingService extends Service implements IGestureDetectLis
         this.isRunning = false;
         this.startId = 0;
 
+        //snooze == 2
+        Log.e("Motion Detected: ", String.valueOf(gestureID));
+        if (gestureID == 2){
+            Intent my_intent = new Intent(getApplicationContext(), Alarm_Receiver.class);
+            my_intent.putExtra("extra", "ON: " + alarmId);
+            PendingIntent pending_intent = PendingIntent.getBroadcast(getApplicationContext(), 0,
+                    my_intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.SECOND,20);
+
+            // set the alarm manager
+            AlarmManager alarm_manager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            alarm_manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                    pending_intent);
+        }
+
         detector.close();
     }
 
     public void startGestureListener() {
+
         Cursor c = db.rawQuery("SELECT * FROM " + AlarmContract.MotionEntry.TABLE_NAME, null);
         List<DeviceGestureModel> list = parseCursor(c);
         Log.e("RingtonePS: ", "List of gest = " + String.valueOf(list.size()));
         for (DeviceGestureModel m : list) {
+            Log.e("RingtonePS: ", "Motion " + m.toString());
             detector.registerGestureDetection(m, this);
         }
     }
@@ -228,7 +251,9 @@ public class RingtonePlayingService extends Service implements IGestureDetectLis
             String z = c.getString(c.getColumnIndexOrThrow(AlarmContract.MotionEntry.Z));
 
             long t = Long.parseLong(interval);
+            Log.e("RingtonPS: ", "Adding motion name " + motionName);
             int name = Integer.parseInt(motionName);
+            Log.e("RingtonPS: ", "Adding motion number " + name);
             float[] xaxis = parseAxis(x);
             float[] yaxis = parseAxis(y);
             float[] zaxis = parseAxis(z);

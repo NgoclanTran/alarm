@@ -53,7 +53,8 @@ public class SetMotionActivity extends AppCompatActivity {
     long tStart;
     long tEnd;
    //long interval = Long.valueOf(Long.toHexString(5*1000000),16).longValue();
-    long interval = 5*1000000; //Interval between measures (5ms)
+    long interval = 0;
+    int count = 10;
     long duration = 0; // duration of gesutre  (measured in nanoseconds)
     DataReceiver receiver;
 
@@ -227,9 +228,7 @@ public class SetMotionActivity extends AppCompatActivity {
         startButton.setPressed(true);
         startButton.setOnClickListener(null);
         duration = (tEnd - tStart);
-        //Log.e("duration in hex: ",Long.toHexString(duration));
-        Log.e("duration", String.valueOf(duration));
-        Log.e("innterval :", String.valueOf(interval));
+        //Log.e("duration in hex: ",Long.toHexString(duration));$
         //duration = Long.valueOf(Long.toHexString(duration),16).longValue();
         //Log.e("duration long hex: ",String.valueOf(duration));
        // duration = 120*1000000;
@@ -239,7 +238,7 @@ public class SetMotionActivity extends AppCompatActivity {
 
     private void startRecording() {
         receiver = new DataReceiver(this);
-        final int count = (int) (duration/interval);
+        interval = (duration/count);
         Log.e("duration: ",String.valueOf(duration));
         Log.e("interval: ", String.valueOf(interval));
         Log.e("count: ",String.valueOf(count));
@@ -339,7 +338,7 @@ public class SetMotionActivity extends AppCompatActivity {
     public void addMotionToDatabase(int id, float[] fA, float[] sA, float[] vA){
 
         //TODO: Delete this line for final version
-        db.execSQL("delete from " + AlarmContract.MotionEntry.TABLE_NAME);
+        //db.execSQL("delete from " + AlarmContract.MotionEntry.TABLE_NAME);
         Log.e("AddtoDatabase",fA.toString());
         
         String stringFA = Arrays.toString(fA);
