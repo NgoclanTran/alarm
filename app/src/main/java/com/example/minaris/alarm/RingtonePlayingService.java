@@ -33,7 +33,7 @@ public class RingtonePlayingService extends Service implements IGestureDetectLis
     IGestureDetector detector;
 
 
-    float requiredProximity = 0.75f; //Threshold of detection
+    float requiredProximity = 0.5f; //Threshold of detection
     CompareMode mode = CompareMode.Flattened; //Mode of axis data comparison
     long cooldown = 1000 * 1000000; //Idleness interval after detection event in nanoseconds (1000ms)
     long deviation = 200 * 1000000; //Possible deviation of total duration in nanoseconds (200ms)

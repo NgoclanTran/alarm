@@ -52,7 +52,7 @@ public class SetMotionActivity extends AppCompatActivity {
     long tStart;
     long tEnd;
    //long interval = Long.valueOf(Long.toHexString(5*1000000),16).longValue();
-    long interval = 50; //Interval between measures (5ms)
+    long interval = 5*1000000; //Interval between measures (5ms)
     long duration = 0; // duration of gesutre  (measured in nanoseconds)
     DataReceiver receiver;
 
@@ -212,9 +212,10 @@ public class SetMotionActivity extends AppCompatActivity {
         Log.e("Status: ", "fase 2 gestart");
         startButton.setPressed(true);
         startButton.setOnClickListener(null);
-        duration = (tEnd - tStart)/1000000;
+        duration = (tEnd - tStart);
         //Log.e("duration in hex: ",Long.toHexString(duration));
         Log.e("duration", String.valueOf(duration));
+        Log.e("innterval :", String.valueOf(interval));
         //duration = Long.valueOf(Long.toHexString(duration),16).longValue();
         //Log.e("duration long hex: ",String.valueOf(duration));
        // duration = 120*1000000;
