@@ -7,6 +7,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
@@ -276,7 +277,9 @@ public class SetMotionActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         registerMotion();
-                        finish();
+                        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                        startActivity(intent);
+                        //finish();
                     }
                 });
             }
