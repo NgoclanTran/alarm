@@ -228,17 +228,16 @@ public class SetMotionActivity extends AppCompatActivity {
         Log.e("duration: ",String.valueOf(duration));
         Log.e("interval: ", String.valueOf(interval));
         Log.e("count: ",String.valueOf(count));
-        DeviceGestureLibrary.recordGesture(context, interval, count, receiver);
 
-//        Handler motionHandler = new Handler();
-//        motionHandler.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                Log.e("Recoring", "in start recording");
-//
-//
-//            }
-//        });
+        Handler motionHandler = new Handler();
+        motionHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                Log.e("Recoring", "in start recording");
+                DeviceGestureLibrary.recordGesture(context, interval, count, receiver);
+
+            }
+        });
 
 //        Handler handler = new Handler();
 //        handler.postDelayed(new Runnable() {
