@@ -30,7 +30,9 @@ public class AlarmDbHelper extends SQLiteOpenHelper {
             MotionEntry.X + " TEXT," +
             MotionEntry.Y + " TEXT," +
             MotionEntry.Z + " TEXT," +
+            MotionEntry.TYPE + " TEXT," +
             MotionEntry.INTERVAL + " TEXT)";
+
 
 
 
