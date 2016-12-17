@@ -54,7 +54,7 @@ public class SetMotionActivity extends AppCompatActivity {
     long tEnd;
    //long interval = Long.valueOf(Long.toHexString(5*1000000),16).longValue();
     long interval = 0;
-    int count = 10;
+    int count = 15;
     long duration = 0; // duration of gesutre  (measured in nanoseconds)
     DataReceiver receiver;
 

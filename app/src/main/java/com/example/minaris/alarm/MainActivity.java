@@ -40,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //DELETE DB
-        //this.deleteDatabase("AlarmDB");
+        //
+        // this.deleteDatabase("AlarmDB");
 
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -56,19 +57,6 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         fab = (FloatingActionButton) findViewById(R.id.fabAlarm);
- /*       fab.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                System.out.println("HALLOWWW");
-                /*List fragments = getSupportFragmentManager().getFragments();
-                if(fragments.get(viewPager.getCurrentItem()) instanceof AlarmFragment) {
-                    AlarmFragment.fabOnClick();
-                }
-            }
-
-        });*/
-
     }
 
     private void setupViewPager(ViewPager viewPager) {
